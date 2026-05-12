@@ -1,0 +1,16 @@
+Vad hände?
+
+För att isen ska bära en vuxen ko på #400 kg krävs minst #15 cm tjock is (Golds bärformel).
+
+Från @oktober 1941 till @februari 1942 var det @64 frysdagar (totalt @-327 grader). @3 dagar var det över #0°C, så isen smälte tillbaka lite.
+
+Enligt Stefans istillväxtformel var tjockaste isen i februari: @*48.2 cm.
+
+Beräkning:
+Golds: #400 kg / #4 kg/cm² = #100 cm² → #15 cm min
+Stefan: #2.5 × √@322 = @48.2 cm
+
+// Gold's rule: 15 cm is safe
+result = iceThickness >= 15 ? "Safe for cow" : "Ice breaks";
+
+Grund: Historiska väderdata Malmö 1917–2026.
