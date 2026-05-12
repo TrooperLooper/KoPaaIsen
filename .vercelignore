@@ -1,0 +1,9 @@
+backend/
+weather.db
+weather.db-shm
+weather.db-wal
+*.log
+node_modules
+.git
+migrate-to-turso.js
+.env.local

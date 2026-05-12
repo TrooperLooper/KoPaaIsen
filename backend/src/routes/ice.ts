@@ -7,7 +7,7 @@ const VALID_MONTHS = [10, 11, 12, 1, 2, 3, 4, 5]; // Oct-May
 const MIN_YEAR = 1917;
 const MAX_YEAR = 2026;
 
-router.get("/:year/:month", (req: Request, res: Response) => {
+router.get("/:year/:month", async (req: Request, res: Response) => {
   try {
     const year = parseInt(req.params.year, 10);
     const month = parseInt(req.params.month, 10);
@@ -40,7 +40,7 @@ router.get("/:year/:month", (req: Request, res: Response) => {
       });
     }
 
-    const result = calculateIceForMonth(year, month);
+    const result = await calculateIceForMonth(year, month);
     return res.status(200).json(result);
   } catch (error) {
     console.error("Error in /api/ice/:year/:month", error);

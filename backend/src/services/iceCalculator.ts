@@ -4,28 +4,29 @@ import { IceResult, WeatherRow } from "../types";
 const STEFAN_CONSTANT = 2.5;
 const COW_THRESHOLD_CM = 11;
 
-export function calculateIceForMonth(
+export async function calculateIceForMonth(
   year: number,
   month: number
-): IceResult {
+): Promise<IceResult> {
   const startDate = new Date(year - 1, 9, 1); // Oct 1 of previous year
   const endDate = new Date(year, month, 0); // Last day of selected month
 
   const monthStart = new Date(year, month - 1, 1);
   const monthEnd = new Date(year, month, 0);
 
-  const allTemps = db
-    .prepare(
-      `
+  const result = await db.execute({
+    sql: `
       SELECT date, temp_c FROM weather_daily
       WHERE date >= ? AND date <= ?
       ORDER BY date ASC
-    `
-    )
-    .all(
+    `,
+    args: [
       startDate.toISOString().split("T")[0],
-      endDate.toISOString().split("T")[0]
-    ) as WeatherRow[];
+      endDate.toISOString().split("T")[0],
+    ],
+  });
+
+  const allTemps = (result.rows as unknown as WeatherRow[]) || [];
 
   let fddSum = 0;
   let maxIceCm = 0;

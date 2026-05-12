@@ -1,17 +1,27 @@
-import Database from "better-sqlite3";
-import type BetterSqlite3 from "better-sqlite3";
-import path from "path";
+import { createClient } from "@libsql/client";
 
-const dbPath = path.resolve(process.cwd(), "..", "weather.db");
-const db: BetterSqlite3.Database = new Database(dbPath);
+const tursoUrl = process.env.TURSO_URL;
+const tursoToken = process.env.TURSO_TOKEN;
 
-db.pragma("journal_mode = WAL");
+if (!tursoUrl || !tursoToken) {
+  throw new Error("Missing TURSO_URL or TURSO_TOKEN environment variables");
+}
 
-const rowCount = db
-  .prepare("SELECT COUNT(*) as count FROM weather_daily")
-  .get() as { count: number };
+const db = createClient({
+  url: tursoUrl,
+  authToken: tursoToken,
+});
 
-console.log(`✓ SQLite opened at ${dbPath}`);
-console.log(`✓ weather_daily table: ${rowCount.count} rows`);
+// Initialize and log connection
+(async () => {
+  try {
+    const result = await db.execute("SELECT COUNT(*) as count FROM weather_daily");
+    const rowCount = result.rows[0]?.count || 0;
+    console.log(`✓ Connected to Turso`);
+    console.log(`✓ weather_daily table: ${rowCount} rows`);
+  } catch (error) {
+    console.error("Failed to connect to Turso:", error);
+  }
+})();
 
 export default db;

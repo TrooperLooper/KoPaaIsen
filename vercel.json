@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm run build --prefix frontend",
+  "outputDirectory": "frontend/dist",
+  "framework": "vite",
+  "env": {
+    "TURSO_URL": "@turso_url",
+    "TURSO_TOKEN": "@turso_token"
+  }
+}
