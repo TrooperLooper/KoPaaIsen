@@ -1,33 +1,36 @@
 import "./Dials.css";
-
-const MONTHS = [
-  { label: "Oct", value: 10 },
-  { label: "Nov", value: 11 },
-  { label: "Dec", value: 12 },
-  { label: "Jan", value: 1 },
-  { label: "Feb", value: 2 },
-  { label: "Mar", value: 3 },
-  { label: "Apr", value: 4 },
-  { label: "May", value: 5 },
-];
+import { MONTHS } from "../constants/months";
 
 interface Props {
   value: number;
   onChange: (month: number) => void;
   disabled?: boolean;
+  year?: number;
 }
 
-export default function MonthDial({ value, onChange, disabled }: Props) {
+export default function MonthDial({ value, onChange, disabled, year = 2000 }: Props) {
+  const getValidMonthRange = (selectedYear: number) => {
+    if (selectedYear === 1917) {
+      return { minIndex: 5, maxIndex: 7 }; // Mar, Apr, May (indices 5, 6, 7)
+    } else if (selectedYear === 2026) {
+      return { minIndex: 3, maxIndex: 3 }; // Jan only (index 3)
+    } else {
+      return { minIndex: 0, maxIndex: 7 }; // Oct through May
+    }
+  };
+
+  const { minIndex, maxIndex } = getValidMonthRange(year);
   const index = MONTHS.findIndex((m) => m.value === value);
-  const currentLabel = MONTHS[index]?.label ?? "Feb";
+  const validIndex = index >= minIndex && index <= maxIndex ? index : minIndex;
+  const currentLabel = MONTHS[validIndex]?.label ?? "Feb";
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       <input
         type="range"
-        min={0}
-        max={MONTHS.length - 1}
-        value={index === -1 ? 4 : index}
+        min={minIndex}
+        max={maxIndex}
+        value={validIndex}
         disabled={disabled}
         onChange={(e) => onChange(MONTHS[Number(e.target.value)].value)}
         className="w-full accent-blue-400 cursor-pointer disabled:cursor-not-allowed"

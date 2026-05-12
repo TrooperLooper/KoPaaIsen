@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function Snowfall({ count = 50, resetTrigger = 0 }: Props) {
-  const snowflakes = useMemo(() => {
+  const snowflakes = useMemo((): Snowflake[] => {
     return Array.from({ length: count }, (_, i) => ({
       id: i + resetTrigger,
       left: Math.random() * 100,

@@ -11,9 +11,6 @@ export default function CowAnimation({ holdsCow, isLoading }: Props) {
     src: "/cow_scene.riv",
     stateMachines: "CowMachine",
     autoplay: true,
-    fit: "fill",
-    alignment: "center",
-    autoBind: false,
   });
 
   const viewModel = useViewModel(rive, { name: "ViewModel1" });
@@ -31,15 +28,9 @@ export default function CowAnimation({ holdsCow, isLoading }: Props) {
   useEffect(() => {
     if (viewModelInstance) {
       const hasValidResult = holdsCow !== null && !isLoading;
-      console.log("=== CowAnimation Effect ===");
-      console.log("Input props:", { holdsCow, isLoading });
-      console.log("Computed hasValidResult:", hasValidResult);
-      console.log("About to set Rive properties:", { hasResult: hasValidResult, holdsCow: holdsCow === null ? true : holdsCow });
 
       setHasResult(hasValidResult);
       setHoldsCow(holdsCow === null ? true : holdsCow);
-
-      console.log("Rive properties set. ViewModelInstance:", viewModelInstance);
     }
   }, [holdsCow, isLoading, viewModelInstance, setHoldsCow, setHasResult]);
 

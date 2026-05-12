@@ -4,9 +4,10 @@ interface Props {
   year: number;
   month: number;
   thickness?: number;
+  onInfoClick?: () => void;
 }
 
-export default function IceInfo({ year, month, thickness }: Props) {
+export default function IceInfo({ year, month, thickness, onInfoClick }: Props) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -44,7 +45,10 @@ export default function IceInfo({ year, month, thickness }: Props) {
           I {monthName} {year} var isen {thickness?.toFixed(1) || "—"} cm.
           Klicka för att se hur det beräknades
         </p>
-        <button className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-colors">
+        <button
+          onClick={onInfoClick}
+          className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-colors cursor-pointer"
+        >
           i
         </button>
       </div>

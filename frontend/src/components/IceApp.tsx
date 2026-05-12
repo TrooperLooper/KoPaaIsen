@@ -6,12 +6,14 @@ import TestButton from "./TestButton";
 import CowAnimation from "./CowAnimation";
 import Snowfall from "./Snowfall";
 import IceInfo from "./IceInfo";
+import CalculationModal from "./CalculationModal";
 
 export default function IceApp() {
   const [year, setYear] = useState(1942);
   const [month, setMonth] = useState(2);
   const [animationKey, setAnimationKey] = useState(0);
-  const { result, isLoading, fetchData, clearResult } = useIceData();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { result, isLoading, error, fetchData, clearResult } = useIceData();
 
   const handleReset = () => {
     clearResult();
@@ -22,7 +24,8 @@ export default function IceApp() {
     <div
       style={{
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
         minHeight: "100vh",
         padding: "1rem",
       }}
@@ -53,10 +56,35 @@ export default function IceApp() {
             isLoading={isLoading}
           />
           <Snowfall resetTrigger={animationKey} />
+          {error && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg max-w-xs text-center">
+                <p className="font-semibold mb-2">Något gick fel</p>
+                <p className="text-sm">{error}</p>
+              </div>
+            </div>
+          )}
           {result && (
-            <IceInfo year={year} month={month} thickness={result.maxIceCm} />
+            <IceInfo
+              year={year}
+              month={month}
+              thickness={result.maxIceCm}
+              onInfoClick={() => setIsModalOpen(true)}
+            />
           )}
         </div>
+
+        {/* Calculation Modal */}
+        {result && (
+          <CalculationModal
+            year={year}
+            month={month}
+            thickness={result.maxIceCm}
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            fdd={result.fddAtPeak}
+          />
+        )}
 
         {/* Controls - positioned below with negative margin to overlap canvas */}
         <div
@@ -66,13 +94,14 @@ export default function IceApp() {
           {/* Dials side by side */}
           <div className="flex justify-center gap-8 px-4">
             <div className="flex-1">
-              <YearDial value={year} onChange={setYear} disabled={isLoading} />
+              <YearDial value={year} onChange={setYear} disabled={isLoading || !!result} />
             </div>
             <div className="flex-1">
               <MonthDial
                 value={month}
                 onChange={setMonth}
-                disabled={isLoading}
+                disabled={isLoading || !!result}
+                year={year}
               />
             </div>
           </div>
@@ -86,6 +115,27 @@ export default function IceApp() {
             />
           </div>
         </div>
+      </div>
+
+      {/* Info text block, now full width of canvas */}
+      <div className="w-full text-xs text-gray-600 text-center space-y-1">
+        <p>
+          Historiska väderdata från Malmö (1917–2026) bearbetas i Express
+          backend, beräknas mot fysiska formler, visualiseras i{" "}
+        </p>
+        <p>
+          React frontend och animeras med handgjorda Rive-animationer. Data
+          lagras i SQLite.{" "}
+          <span className="font-bold">Skapad av Lars Munck 2026. </span>
+          <a
+            href="https://github.com/TrooperLooper/KoPaaIsen"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-gray-800 font-bold"
+          >
+            Github
+          </a>
+        </p>
       </div>
     </div>
   );

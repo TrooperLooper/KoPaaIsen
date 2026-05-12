@@ -2,7 +2,7 @@ import db from "../utils/db";
 import { IceResult, WeatherRow } from "../types";
 
 const STEFAN_CONSTANT = 2.5;
-const COW_THRESHOLD_CM = 15;
+const COW_THRESHOLD_CM = 11;
 
 export function calculateIceForMonth(
   year: number,
