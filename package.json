@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "build": "npm --prefix frontend run build"
+  },
   "dependencies": {
     "@libsql/client": "^0.17.3",
     "better-sqlite3": "^12.9.0"
