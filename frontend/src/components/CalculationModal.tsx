@@ -63,12 +63,10 @@ export default function CalculationModal({
               1. Hur tjock is en ko kräver
             </div>
             <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
-              <h3 className="inter-bold uppercase text-gray-900 text-base">
+              <h3 className="inter-bold uppercase text-gray-900 mb-5 text-base">
                 Golds formel
               </h3>
-              <p className="inter-regular text-gray-700 text-xs lowercase mt-1 mb-3">
-                – hur tjock is krävs?
-              </p>
+
               <p className="inter-bold text-gray-900 mb-3 text-sm">
                 P = A × H²
               </p>
@@ -103,16 +101,14 @@ export default function CalculationModal({
 
           {/* Stefan's Formula Section */}
           <div>
-            <div className="bg-black text-white p-3 text-center text-base font-bold tracking-wide mb-3">
+            <div className="bg-black text-white p-3 mt-5 text-center text-base font-bold tracking-wide mb-3">
               2. Hur tjock isen faktiskt var
             </div>
             <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
-              <h3 className="inter-bold text-gray-900 text-base uppercase">
+              <h3 className="inter-bold text-gray-900 mb-5 text-base uppercase">
                 Stefans formel
               </h3>
-              <p className="inter-regular text-gray-700 text-xs lowercase mt-1 mb-3">
-                – hur tjock var isen?
-              </p>
+
               <p className="inter-italic text-gray-700 mb-3 text-sm">
                 Bygger på netto frostgraddygn: varje grad under 0°C adderas per
                 dag, varje grad över subtraheras. −5°C i tio dagar = 50
@@ -167,11 +163,11 @@ export default function CalculationModal({
             </p>
           </p>
           {thickness >= 11 ? (
-            <p className="bevan-regular text-green-700 font-semibold text-lg">
+            <p className="bevan-regular text-green-700 font-semibold text-lg mt-8">
               ✓ Isen höll – kon blev kvar på benen!
             </p>
           ) : (
-            <p className="bevan-regular text-red-700 font-semibold text-lg">
+            <p className="bevan-regular text-red-700 font-semibold text-lg mt-8">
               ✗ Så tyvärr ingen ko på isen – isen hade inte hållit.
             </p>
           )}
