@@ -36,7 +36,7 @@ export default function IceInfo({ year, month, thickness, onInfoClick }: Props) 
 
   return (
     <div
-      className={`absolute top-45 flex items-center justify-center z-20 transition-opacity duration-500 ${
+      className={`absolute top-[27%] flex items-center justify-center z-20 transition-opacity duration-500 ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >

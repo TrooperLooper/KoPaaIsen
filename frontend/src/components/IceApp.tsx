@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useIceData } from "../hooks/useIceData";
 import YearDial from "./YearDial";
 import MonthDial from "./MonthDial";
@@ -14,6 +14,18 @@ export default function IceApp() {
   const [animationKey, setAnimationKey] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { result, isLoading, error, fetchData, clearResult } = useIceData();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const parentWidth = Math.min(windowWidth - 32, 384);
+  const canvasWidth = 1.8 * parentWidth;
+  const canvasHeight = Math.min(650, canvasWidth);
+  const controlsOverlap = canvasHeight * (120 / 650);
 
   const handleReset = () => {
     clearResult();
@@ -28,6 +40,7 @@ export default function IceApp() {
         alignItems: "center",
         minHeight: "100vh",
         padding: "1rem",
+        overflowX: "hidden",
       }}
     >
       <div
@@ -42,7 +55,7 @@ export default function IceApp() {
         {/* Animation area */}
         <div
           style={{
-            height: "650px",
+            height: `${canvasHeight}px`,
             width: "180%",
             position: "relative",
             overflow: "visible",
@@ -89,7 +102,7 @@ export default function IceApp() {
         {/* Controls - positioned below with negative margin to overlap canvas */}
         <div
           className="flex flex-col gap-6 px-4 py-12 z-10"
-          style={{ marginTop: "-120px", position: "relative" }}
+          style={{ marginTop: `-${controlsOverlap}px`, position: "relative" }}
         >
           {/* Dials side by side */}
           <div className="flex justify-center gap-8 px-4">

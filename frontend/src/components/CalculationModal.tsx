@@ -37,7 +37,7 @@ export default function CalculationModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-amber-50 rounded-lg max-w-2xl w-full p-8 shadow-xl relative max-h-[90vh] overflow-y-auto">
+      <div className="bg-amber-50 rounded-lg max-w-2xl w-full p-4 sm:p-8 shadow-xl relative max-h-[90vh] overflow-y-auto">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -57,7 +57,7 @@ export default function CalculationModal({
         </p>
 
         {/* Formula Sections Side by Side */}
-        <div className="grid grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
           {/* Gold's Formula Section */}
           <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
             <h3 className="inter-bold uppercase text-gray-900 text-base">
