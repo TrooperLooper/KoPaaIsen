@@ -1,4 +1,3 @@
-import { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@libsql/client";
 
 const db = createClient({
@@ -9,42 +8,50 @@ const db = createClient({
 const STEFAN_CONSTANT = 2.5;
 const COW_THRESHOLD_CM = 11;
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
-
-  if (req.method === "OPTIONS") {
-    res.status(200).end();
-    return;
-  }
+export async function GET(request: Request) {
+  // CORS headers
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+  };
 
   try {
-    const year = parseInt(req.query.year as string, 10);
-    const month = parseInt(req.query.month as string, 10);
+    const { searchParams } = new URL(request.url);
+    const year = parseInt(searchParams.get("year") || "0", 10);
+    const month = parseInt(searchParams.get("month") || "0", 10);
 
     const VALID_MONTHS = [10, 11, 12, 1, 2, 3, 4, 5];
     const MIN_YEAR = 1917;
     const MAX_YEAR = 2026;
 
     if (isNaN(year) || isNaN(month)) {
-      return res.status(400).json({
-        error: "Invalid year or month",
-        details: "year and month must be integers",
-      });
+      return new Response(
+        JSON.stringify({
+          error: "Invalid year or month",
+          details: "year and month must be integers",
+        }),
+        { status: 400, headers }
+      );
     }
 
     if (year < MIN_YEAR || year > MAX_YEAR) {
-      return res.status(400).json({
-        error: "Year out of range",
-        details: `year must be between ${MIN_YEAR} and ${MAX_YEAR}`,
-      });
+      return new Response(
+        JSON.stringify({
+          error: "Year out of range",
+          details: `year must be between ${MIN_YEAR} and ${MAX_YEAR}`,
+        }),
+        { status: 400, headers }
+      );
     }
 
     if (month < 1 || month > 12 || !VALID_MONTHS.includes(month)) {
-      return res.status(400).json({
-        error: "Invalid month",
-        details: `month must be one of: ${VALID_MONTHS.join(", ")}`,
-      });
+      return new Response(
+        JSON.stringify({
+          error: "Invalid month",
+          details: `month must be one of: ${VALID_MONTHS.join(", ")}`,
+        }),
+        { status: 400, headers }
+      );
     }
 
     const startDate = new Date(year - 1, 9, 1);
@@ -103,24 +110,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const holdsCow = maxIceCm >= COW_THRESHOLD_CM;
     const maxIceCmFormatted = parseFloat(maxIceCm.toFixed(1));
 
-    res.status(200).json({
-      year,
-      month,
-      bestDate,
-      maxIceCm: maxIceCmFormatted,
-      holdsCow,
-      fddAtPeak,
-      freezeDays,
-      thawDays,
-      message: holdsCow
-        ? `Tjock is! ${maxIceCmFormatted}cm on ${bestDate || "N/A"}`
-        : `Inte tjock nog. Max: ${maxIceCmFormatted}cm`,
-    });
+    return new Response(
+      JSON.stringify({
+        year,
+        month,
+        bestDate,
+        maxIceCm: maxIceCmFormatted,
+        holdsCow,
+        fddAtPeak,
+        freezeDays,
+        thawDays,
+        message: holdsCow
+          ? `Tjock is! ${maxIceCmFormatted}cm on ${bestDate || "N/A"}`
+          : `Inte tjock nog. Max: ${maxIceCmFormatted}cm`,
+      }),
+      { status: 200, headers }
+    );
   } catch (error) {
     console.error("Error in /api/ice", error);
-    res.status(500).json({
-      error: "Internal server error",
-      details: error instanceof Error ? error.message : "Unknown error",
-    });
+    return new Response(
+      JSON.stringify({
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }
