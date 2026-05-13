@@ -51,12 +51,16 @@ export default function CalculationModal({
           Hur vet vi om isen kunde bära?
         </h2>
 
+        <p className="inter-regular text-gray-700 mb-8 text-base text-center">
+          För att få svar på detta behöver vi veta två saker:
+        </p>
+
         {/* Formula Sections Side by Side Mobile version */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
           {/* Gold's Formula Section */}
           <div>
             <div className="bg-black text-white p-3 text-center text-base font-bold tracking-wide mb-3">
-              Hur tjock is en ko kräver
+              1. Hur tjock is en ko kräver
             </div>
             <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
               <h3 className="inter-bold uppercase text-gray-900 text-base">
@@ -100,7 +104,7 @@ export default function CalculationModal({
           {/* Stefan's Formula Section */}
           <div>
             <div className="bg-black text-white p-3 text-center text-base font-bold tracking-wide mb-3">
-              Hur tjock isen faktiskt var
+              2. Hur tjock isen faktiskt var
             </div>
             <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
               <h3 className="inter-bold text-gray-900 text-base uppercase">
