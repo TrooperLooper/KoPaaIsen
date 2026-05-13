@@ -159,6 +159,7 @@ Kort, logisk förklaring:
 - **Logiskt:** Tydlig separation av konstanter och variabler, kod och matematik.
 - **Pedagogiskt:** Förklarar både för användare och utvecklare hur allt hänger ihop.
 - **Fullstack:** Från databas till animation.
+- **Claude:** Med agentisk co-coding kunde jag tänka större, gå djupare i min vision.
 
 ---
 
