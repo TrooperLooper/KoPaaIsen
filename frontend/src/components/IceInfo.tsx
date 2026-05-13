@@ -42,7 +42,8 @@ export default function IceInfo({ year, month, thickness, onInfoClick }: Props) 
     >
       <div className="flex items-center justify-center gap-1 sm:gap-3 px-2 sm:px-6 w-11/12">
         <p className="text-white text-xs sm:text-sm font-semibold text-center">
-          I {monthName} {year} var isen {thickness?.toFixed(1) || "—"} cm. Klicka för att se hur
+          I {monthName} {year} var isen {thickness?.toFixed(1) || "—"} cm.<br />
+          Klicka för att se hur
         </p>
         <button
           onClick={onInfoClick}
