@@ -33,11 +33,11 @@ export default function TestButton({
 
   if (isLoading) {
     bgColor = "#3b82f6"; // blue - loading
-    text = "...";
+    text = "BERÄKNAR";
     isDisabled = true;
   } else if (hasResult && !animationComplete) {
     bgColor = "#3b82f6"; // blue - animation playing
-    text = "...";
+    text = "BERÄKNAR";
     isDisabled = true;
   } else if (hasResult && animationComplete) {
     bgColor = "#eab308"; // yellow - show rewind
@@ -59,8 +59,9 @@ export default function TestButton({
       disabled={isDisabled}
       style={{
         backgroundColor: bgColor,
-        width: "150px",
-        padding: "0.5rem 1.5rem",
+        width: "auto",
+        minWidth: "150px",
+        padding: "0.5rem 2rem",
         borderRadius: "2rem",
         color: "white",
         fontSize: "1rem",
@@ -73,6 +74,7 @@ export default function TestButton({
         transition: "all 0.3s ease",
         margin: "0 auto",
         display: "block",
+        whiteSpace: "nowrap",
       }}
     >
       {text}
