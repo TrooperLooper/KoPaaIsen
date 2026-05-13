@@ -59,9 +59,8 @@ export default function TestButton({
       disabled={isDisabled}
       style={{
         backgroundColor: bgColor,
-        width: "auto",
-        minWidth: "150px",
-        padding: "0.5rem 2rem",
+        width: "180px",
+        padding: "0.5rem 1rem",
         borderRadius: "2rem",
         color: "white",
         fontSize: "1rem",

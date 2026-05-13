@@ -133,7 +133,7 @@ export default function IceApp() {
       </div>
 
       {/* Info text block, now full width of canvas */}
-      <div className="w-full text-xs text-gray-600 text-center space-y-1">
+      <div className="w-full text-[0.65rem] sm:text-xs text-gray-600 text-center space-y-1">
         <p>
           Historiska väderdata från Malmö (1917–2026) bearbetas i Express
           backend, beräknas mot fysiska formler, visualiseras i{" "}
