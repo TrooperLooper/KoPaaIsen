@@ -4,7 +4,7 @@ export async function fetchIceData(
   year: number,
   month: number
 ): Promise<IceResult> {
-  const response = await fetch(`/api/ice/${year}/${month}`);
+  const response = await fetch(`/api/ice?year=${year}&month=${month}`);
   if (!response.ok) {
     throw new Error(`API error: ${response.status}`);
   }
