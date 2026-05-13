@@ -149,7 +149,7 @@ export default function CalculationModal({
         </div>
 
         {/* Result Section */}
-        <div className="mb-6 pb-6 text-center">
+        <div className="mt-12 mb-6 pb-6 text-center">
           <p className="inter-regular text-gray-700 mt-10 mb-4 text-base">
             Så minst <span className="font-bold text-red-700">11</span> cm is
             krävdes för en <span className="text-green-700 font-bold">400</span>{" "}
