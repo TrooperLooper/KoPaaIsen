@@ -7,7 +7,12 @@ interface Props {
   onInfoClick?: () => void;
 }
 
-export default function IceInfo({ year, month, thickness, onInfoClick }: Props) {
+export default function IceInfo({
+  year,
+  month,
+  thickness,
+  onInfoClick,
+}: Props) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -42,8 +47,9 @@ export default function IceInfo({ year, month, thickness, onInfoClick }: Props) 
     >
       <div className="flex items-center justify-center gap-2 sm:gap-3 px-1 sm:px-6 w-full">
         <p className="text-white text-xs sm:text-sm font-semibold text-center">
-          I {monthName} {year} var isen {thickness?.toFixed(1) || "—"} cm.<br />
-          Klicka för att se hur
+          I {monthName} {year} var isen {thickness?.toFixed(1) || "—"} cm.
+          <br />
+          Klicka för att se hur vi beräknade det
         </p>
         <button
           onClick={onInfoClick}

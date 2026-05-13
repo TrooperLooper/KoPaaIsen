@@ -59,7 +59,7 @@ export default function CalculationModal({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
           {/* Gold's Formula Section */}
           <div>
-            <div className="bg-black text-white p-3 text-center text-base font-bold tracking-wide mb-3">
+            <div className="bg-[#CC7721] text-white p-3 text-center text-base font-bold tracking-wide mb-3">
               1. Hur tjock is en ko kräver
             </div>
             <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
@@ -101,7 +101,7 @@ export default function CalculationModal({
 
           {/* Stefan's Formula Section */}
           <div>
-            <div className="bg-black text-white p-3 mt-5 text-center text-base font-bold tracking-wide mb-3">
+            <div className="bg-[#CC7721] text-white p-3 text-center text-base font-bold tracking-wide mb-3">
               2. Hur tjock isen faktiskt var
             </div>
             <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
@@ -153,7 +153,9 @@ export default function CalculationModal({
           <p className="inter-regular text-gray-700 mb-4 text-base">
             Så minst <span className="font-bold text-red-700">11</span> cm is
             krävdes för en <span className="text-green-700 font-bold">400</span>{" "}
-            kg ko, och den tjockaste isen i {monthName} {year} var{" "}
+            kg ko,
+            <br className="hidden sm:block" /> och den tjockaste isen i{" "}
+            {monthName} {year} var{" "}
             <span className="font-bold underline text-red-700">
               {thickness.toFixed(1)} cm
             </span>
