@@ -1,26 +1,26 @@
 # ![Ko på Isen](frontend/public/kopaaisen_github.png)
 
-**En fullstack-applikation som kombinerar historiska väderdata, vetenskaplig fysik och interaktiv animering för att svara på en rolig (men komplex) fråga: Kan en ko stå på isen i någon av Malmös historiska vintrar?**
+**En fullstack-applikation som kombinerar 100 års väderdata, vetenskaplig fysik och interaktiv animering för att svara på en rolig (men vetenskapligt komplex) fråga: Kunde en ko stå på isen i någon av Malmös historiska vintrar?**
 
-[🚀 Live Demo](https://kopaaisen.vercel.app) | [📖 GitHub](https://github.com/TrooperLooper/KoPaaIsen)
+[🚀 Live Demo](https://ko-paa-isen.vercel.app)
 
-_Jag ville med detta projekt visa fram hur jag designar, implementerar och förklarar ett komplett datadrivet system från rådata av en databas till en levande interaktiv infografik._
+_Jag vill med detta projekt visa fram hur jag tänker, designar, implementerar och förklarar ett komplett datadrivet system från rådata av en databas till en levande interaktiv infografik._
 
 ---
 
 ## Idé & Syfte
 
-Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" och får omedelbar visuell och engagerande feedback:
+Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" och får omedelbar visuell feedback:
 
-- **Om isen är tillräckligt tjock:** Kon står stabilt på isen (den animerade kossan är glad)
-- **Om isen är för tunn:** Kon plumsar i (den animerade kossan plumsar förskräckt genom isen)
+- **Om isen är tillräckligt tjock:** Kon står stabilt på isen (och den animerade kossan är nöjd)
+- **Om isen är för tunn:** Kon åker genom isen (med överraskad min och fladdrande öron)
 
 Allt bygger på:
 
 1. **Historiska data** CSV filer från SMHI (39 381 dagsobservationer, tre väderstationer, fr. 1917–2026)
 2. **Vetenskaplig modellering** (Stefan-formeln för istjocklek, Golds regel för bärighet)
 3. **Backend-kalkyl** (FDD-ackumulering, validering)
-4. **Frontend-visualisering** (React, Rive-animation, responsiv design)
+4. **Frontend-visualisering** (React, interaktiva Rive-animationer, responsiv design)
 
 ---
 
@@ -34,11 +34,12 @@ Allt bygger på:
 
 ## Hur det fungerar
 
-**Stack:** React + TypeScript + Tailwind + Rive (animation) | Express + TypeScript | Turso (SQLite cloud)
+**Stack:** React + TypeScript + Tailwind + Rive (state animation) | Express + TypeScript | Turso (SQLite cloud lösning)
 
 **Pipeline:** SMHI-data → Turso → Backend API (`/api/ice/:year/:month`) → React + Rive animation
 
-**Logik:** 
+**Logik:**
+
 - FDD-ackumulering (Freezing Degree Days) från oktober
 - Stefan-formeln för istjocklek
 - Gold's regel för bärighet (11 cm minimum för 400 kg ko)
@@ -47,23 +48,23 @@ Se [Detaljerad implementering](./docs/implementation.md) för full arkitektur.
 
 ---
 
-## Físiken kort förklarat
+## Fysiken kort förklarat
 
-Istjocklek beror på **kumulativ kyla** (FDD), inte enstaka kallnätter. Stefan-formeln från 1800-talet beskriver tillväxten matematiskt. Gold's regel säger att 11 cm tjock is räcker för en 400 kg ko på Malmös saltvatten (A = 3.5 kg/cm²).
+Istjocklek beror på **kumulativ kyla** (FDD) Altså en längre fysperiod, inte enstaka kallnätter. Stefan-formeln från 1800-talet beskriver tillväxten matematiskt. Gold's regel säger att 11 cm tjock is räcker för en 400 kg ko på Malmös saltvatten (A = 3.5 kg/cm²).
 
-Se [Detaljerad fysik-förklaring](./docs/physics.md) för formler och härledning.
+Se [Detaljerad fysik-förklaring](./docs/physics.md) för formler och konklusioner.
 
 ---
 
-## Utvecklarens tankegång: Varför denna arkitektur?
+## Min tankegång kring arkitekturen
 
 ### 1. **Datadrivet designtänkande**
 
-Jag började med **frågan**: "Vad behövs för att svara på om isen håller för en ko ?" och sen arbetade bakåt:
+Jag började med **frågan**: "Vad behövs för att svara på om isen håller för en ko ?" och "Hur tjock va isen i Malmö när jag va liten" och sen arbetade bakåt:
 
-- Väderdata? ✓ Finns hos SMHI (1917–2026)
-- Vetenskaplig modell? ✓ Stefan-formeln är väletablerad
-- Säkerhetsgräns? ✓ Golds regel är dokumenterad
+- 100 års väderdata? ✓ Finns hos SMHI (1917–2026)
+- Vetenskaplig modell för istjocklek? ✓ Stefan-formeln är väletablerad
+- Vetenskaplig modell för bärighet? ✓ Golds regel är dokumenterad
 
 Allt är baserat på **verifierbara fakta**, inte "hittepå."
 
@@ -75,27 +76,26 @@ Backend och frontend är helt åtskilda:
 - **Frontend** vet bara om rendering—ingen fysik-logik
 - De pratar via ett enkelt JSON API
 
-Denna separation gör koden testbar, skalbar och lätt att förstå.
+Denna separation gör koden testbar, skalbar och lätt att förstå. Desutom känndes FDD beräakningen mer "backend-logik" än frontend, så det kändes naturligt att lägga den där.
 
 ### 3. **Transparens i komplexitet**
 
-En användare kan tro att beräkningen är "svart lådor-magi." Jag löste det genom:
+En användare kan tro att beräkningen är gömd i en svart låda. Därför valde jag att visa det genom:
 
-- **CalculationModal**: Visar exakt hur beräkningen gick till
-- **Kod i repot**: Varje konstant är motiverad (STEFAN_CONSTANT = 2.5, COW_THRESHOLD_CM = 11)
-- **README**: Förklarar både vardagligt och tekniskt
+- **CalculationModal**: En popup som visar exakt hur beräkningen gick till
+- **Kod i repot**: Varje konstant är motiverad (tex STEFAN_CONSTANT = 2.5, COW_THRESHOLD_CM = 11)
 
-### 4. **Performance-thinking**
+### 4. **Performance-tänk**
 
-Jag jobbar vanligtvis i MongoDB och SQL. 39 000+ databadrader skulle kunna vara långsamt. Lösningen:
+Jag jobbar vanligtvis i MongoDB och SQL. 39 000+ databasrader skulle kunna bli påtagligt långsamt. Lösningen:
 
-- SQLite-indexering på `date`
+- SQLite-indexering på `date` (supersnabb lookup på FDD perioden)
 - Backend cachar inte (varje API-call är oberoende)
-- Frontend cachar resultatet tills användaren ändrar år/månad
+- Frontend cachar det senaste resultatet tills användaren ändrar år/månad
 
 ### 5. **UX via animation**
 
-Rive-animationen är väldigt lätt att avläsa och **kommunicerar effektivt** komplex information:
+Jag gjorde Rive-animationen humoristisk, med en välkänd motion graphics-stil vilket gör den väldigt lätt att avläsa och **kommunicerar effektivt** komplex information:
 
 - Kon står = "isen höll" (positivt, visuellt)
 - Kon sjunker = "isen bröt" (negativt, omedelbar förståelse)
@@ -121,13 +121,13 @@ En siffra "13.8 cm" säger mindre än att _se_ en glad ko på stabil is.
 
 **Rive State Machine & Data Binding**
 Integreringen av Rive var initialt logisk, men ordningen på data binding var knepig. Jag testade flera states (`holdsCow`, `isLoading`, `cow_anticipation`), men insåg att `hasResult` som en enda boolean löste allt — mindre komplexitet, bättre animationskontroll.
-Rive känns väldigt bekant, som det gamla Flash.
+Rive känns väldigt bekant, som det gamla Flash. Det var kul att lära sig, och speciellt state machines som gör det enkelt att koppla data till olika animationer.
 
 **FDD-logik & Backend-design**
-Jag ville först beräkna FDD i frontend, men när jag tänkte på hur väder inte bara fryser men också töar på vintern läste jag på mer om Stefan-formeln insåg jag att det hörde hemma i backend — där jag redan hade all historisk data. Det blev både renare och mer korrekt. **Lärdom:** Förstå varförnågot fungerar på riktigt, inte bara som modell.
+Jag ville först beräkna FDD i frontend (hur många frysdagar), men när jag tänkte på hur väder inte bara fryser men också töar på vintern läste jag på mer om Stefan-formeln insåg jag att det hörde hemma i backend — där jag redan hade all historisk data. Det blev både renare och mer korrekt. **Lärdom:** Förstå vad som fungerar på riktigt och inte bara som modell i ett labb.
 
 **Datahantering — SQLite över Excel**
-Med 39 000+ temperaturrader från tre olika SMHI-stationer krashade Excel. SQLite blev räddningen — och en bra påminnelse om att välja verktyg efter problem, inte vana. Som MERN-dev var det också värdefullt att träna mer på SQL.
+När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-stationer krashade Excel. SQLite blev räddningen — och en bra påminnelse om att välja verktyg efter problem, inte vana. Som MERN-utvecklare var det också värdefullt att träna mer på SQL igen.
 
 ---
 
@@ -163,7 +163,7 @@ Kort, logisk förklaring:
 
 - **[Detaljerad fysik-förklaring](./docs/physics.md)** — Stefan-formeln, FDD, Gold's regel
 - **[Implementering i detalj](./docs/implementation.md)** — Backend API, React hooks, data pipeline
-- **[Historiskt exempel: Februari 1942](./docs/example-1942.md)** — En av Sveriges kallaste vintrar på 500 år, -28°C i Malmö
+- **[Historiskt exempel: Februari 1942](./docs/example-1942.md)** — En av Sveriges kallaste vintrar på 500 år, och hur det påverkade isen i Malmö.
 
 ---
 
@@ -188,7 +188,7 @@ Jag ville visa att jag kan:
 ✓ **Tänka i system** — Inte bara prata om systemer utan göra det förståeligt och underhållbart.
 ✓ **Matcha mot verklighet** — Resultaten matchar historiska väderdata och fysikaliska gränser
 
-Det här är min sätt att säga: **Jag älskar när kod, design och kontext går hand i hand.**
+Det här är mitt sätt att säga: **Jag verkligen uppskattar när kod, design och kontext går hand i hand.**
 
 ---
 
