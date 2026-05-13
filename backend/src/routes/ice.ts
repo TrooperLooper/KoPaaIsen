@@ -7,10 +7,10 @@ const VALID_MONTHS = [10, 11, 12, 1, 2, 3, 4, 5]; // Oct-May
 const MIN_YEAR = 1917;
 const MAX_YEAR = 2026;
 
-router.get("/:year/:month", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
-    const year = parseInt(req.params.year, 10);
-    const month = parseInt(req.params.month, 10);
+    const year = parseInt(req.query.year as string, 10);
+    const month = parseInt(req.query.month as string, 10);
 
     if (isNaN(year) || isNaN(month)) {
       return res.status(400).json({
