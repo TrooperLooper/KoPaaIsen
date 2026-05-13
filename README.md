@@ -13,7 +13,7 @@ _Jag ville med detta projekt visa fram hur jag designar, implementerar och förk
 Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" och får omedelbar visuell och engagerande feedback:
 
 - **Om isen är tillräckligt tjock:** Kon står stabilt på isen (den animerade kossan är glad)
-- **Om isen är för tunn:** Kon plumsar igenom (den animerade kossan plumsar förskräckt genom isen)
+- **Om isen är för tunn:** Kon plumsar i (den animerade kossan plumsar förskräckt genom isen)
 
 Allt bygger på:
 
@@ -32,189 +32,26 @@ Allt bygger på:
 
 ---
 
-## Fysiken bakom (FDD & Istjocklek)
+## Hur det fungerar
 
-### Begreppslogik: Från väderdata till säker is
+**Stack:** React + TypeScript + Tailwind + Rive (animation) | Express + TypeScript | Turso (SQLite cloud)
 
-Det här projektet visar hur man transformerar rå väderdata till en fysikalisk modell. Tanken är simpel: **is växer när det frysande väder länge, och smälter snabbt när värmen kommer.** Vi behöver mäta denna process korrekt.
+**Pipeline:** SMHI-data → Turso → Backend API (`/api/ice/:year/:month`) → React + Rive animation
 
-#### Frysgradsdagar (FDD) — Kärnkonceptet
+**Logik:** 
+- FDD-ackumulering (Freezing Degree Days) från oktober
+- Stefan-formeln för istjocklek
+- Gold's regel för bärighet (11 cm minimum för 400 kg ko)
 
-Istjocklek beror inte bara på en enda kallnatt. Det är den **kumulativa effekten** av lång kyla som räknas. Därför använder vi Frysgradsdagar (Freezing Degree Days).
-
-**På begriplig svenska:**
-Varje dag som är kallare än 0°C bidrar till istjockleken. En dag på −5°C är "värre" än en dag på −1°C. En dag på +5°C smälter många frysgrader bort igen.
-
-**Tekniskt:**
-
-```
-FDD(dag) = |temperatur| if temperatur < 0, else 0
-Net FDD = ∑(FDD från okt) − ∑(varmedagar från okt)
-```
-
-- Från **1 oktober** började vi räkna (höstens start, vattnets första kylning)
-- Varje dag med minusgrader adderas: -5°C → +5 FDD
-- Varje dag med plusgrader minskar: +2°C → −2 FDD (men aldrig under 0, isen kan inte bli "mindre tjock" än ingenting)
-- Slutresultatet är ett tal som representerar **netto frysintensitet** över en période
-
-#### Stefans istillväxtformel — Hur tjock blir isen?
-
-I slutet av 1800-talet löste fysikern Josef Stefan en värmeekvation för hur tjock en isfilm blir under kontinuerlig frysning. Formeln är välkänd inom glaciologi:
-
-$$I = C \times \sqrt{\sum \text{Net FDD}}$$
-
-**På begriplig svenska:**
-Tjockare is växer långsammare. Om vi har dubbelt så många frysgrader blir isen inte dubbelt tjock—bara √2 gånger tjockare. Det är därför √ är där.
-
-**Tekniskt:**
-
-- `I` = istjocklek (cm)
-- `C` = 2.5 (empiriskt värde för Öresund, baserat på historiska observationer)
-- `√(Net FDD)` = kvadratroten av den kumulativa frysintensiteten
-- Konstanten `C` är regionspecifik; andra platser har andra värden beroende på vind, snötäcke, vattnets salthalt
-
-#### Golds bärformel — Kan isen bära en ko?
-
-Lastbärighetens fysik är enkel: **Trycket på isen måste vara mindre än isens styrka.**
-
-**På begriplig svenska:**
-En ko på 400 kg på isen, hur tjock måste isen vara för att inte gå sönder?
-kraft per areal och jämföra det med isens bärförmåga.
-
-**Tekniskt:**
-
-```
-Tryck per cm² = vikt / kontaktarea
-Istyrka per cm² ≈ 3.5 kg/cm² (empirisk gräns för saltvatten/Öresund)
-
-För 400 kg: 400 kg / 3.5 kg/cm² = 114.3 cm²
-Om varje ben är ~25 cm², passar 4 ben.
-Minimum istjocklek för säkerhet: ~11 cm
-```
-
-Denna gräns är välkänd från sjöis-tabeller och glaciärdokumentation.
+Se [Detaljerad implementering](./docs/implementation.md) för full arkitektur.
 
 ---
 
-## Implementering i stacken: Från Data till UI
+## Físiken kort förklarat
 
-### Backend-logik: Kalkylen som motor
+Istjocklek beror på **kumulativ kyla** (FDD), inte enstaka kallnätter. Stefan-formeln från 1800-talet beskriver tillväxten matematiskt. Gold's regel säger att 11 cm tjock is räcker för en 400 kg ko på Malmös saltvatten (A = 3.5 kg/cm²).
 
-På backendnivå (Express + TypeScript) gör vi följande **varje gång användaren frågar**:
-
-1. **Hämta väderdata från SQLite** — alla dagar från 1 oktober (året innan) till slutet av vald månad
-2. **Iterera genom temperaturer** och bygga upp FDD-summan dag för dag:
-
-   ```typescript
-   for (const row of allTemps) {
-     const temp = row.temp_c;
-     if (temp < 0) {
-       fddSum += Math.abs(temp);
-       freezeDays++;
-     } else if (temp > 0) {
-       fddSum = Math.max(0, fddSum - temp); // Aldrig negativ
-       thawDays++;
-     }
-
-     // Stefan-formeln, uppdaterad varje dag för att hitta max
-     const iceCm = STEFAN_CONSTANT * Math.sqrt(fddSum);
-     if (iceCm > maxIceCm) {
-       maxIceCm = iceCm;
-       fddAtPeak = fddSum;
-     }
-   }
-   ```
-
-3. **Jämför slutresultatet med Golds formel**:
-   ```typescript
-   const holdsCow = maxIceCm >= COW_THRESHOLD_CM; // 11 cm minimum
-   ```
-
-**Logiken här:** Istjockleken är inte monotonisk, den kan minska när det blir varmare. Därför spårar vi den maximala istjockleken och när den uppnåddes (fddAtPeak).
-
-### Frontend-rendering: Resultatet blir visuellt
-
-Systemet skickar tillbaka:
-
-- `maxIceCm` — den tjockaste isen under perioden
-- `holdsCow` — sant/falskt baserat på Gold-gränsen
-- `freezeDays`, `thawDays`, `fddAtPeak` — detaljer för användarens förståelse
-
-I React-appen:
-
-1. **CowAnimation** byter tillstånd baserat på `holdsCow`
-   - `holdsCow === true` → kons modell står stabilt på isen (Rive-animation "stand")
-   - `holdsCow === false` → kons modell sjunker genom isen (Rive-animation "plunge")
-
-2. **IceInfo** modal visar siffrorna på ett lättläst sätt:
-   - "Tjockaste isen: 44,8 cm"
-   - "Resultat: Kon klarar sig! ✓"
-
-3. **CalculationModal** förklarar (på svenska) exakt varför resultatet blev så:
-   - Hur många frysdagar det var
-   - Hur Stefan-formeln applicerades
-   - Varför 11 cm är gränsen för Golds regel
-
-### Dataintegration: Full stack pipeline
-
-```
-SQLite (39 000+ dagsobservationer)
-    ↓
-Backend API: `/api/ice/:year/:month`
-    ↓ (FDD-kalkyl + Stefan + Gold)
-JSON-svar: { maxIceCm, holdsCow, freezeDays, thawDays, fddAtPeak }
-    ↓
-React hooks (`useIceData`) hämtar och cachas
-    ↓
-Komponenter renderar animering + modal
-    ↓
-Användaren ser: En ko som antingen står på isen eller plumsar
-```
-
----
-
-## Exempelberäkning: Februari 1942 (ett verkligt fall)
-
-**Historisk kontext:**
-Vintern 1941–1942 var en av de kallaste under 1900-talet i Sverige. Vi tittar på vad som hände från oktober 1941 till februari 1942.
-
-**Vad vi hade:**
-
-- Från 1 oktober 1941 → 29 februari 1942 = ~152 dagar
-- 64 dagar med temperatur < 0°C (kalla vinterdagar)
-- 3 dagar med temperatur > 0°C (korta upptiningar)
-- Resten omkring 0°C (övergångsdagar)
-
-**Steg-för-steg-beräkning:**
-
-1. **FDD-ackumuleringen** (förenklad):
-
-   ```
-   Frysgrader: |−2| + |−5| + |−8| + ... = 327 (summa)
-   Varmefrysning: 1 + 0.5 + 0.3 + ... = 5 (summa)
-   Net FDD = 327 − 5 = 322
-   ```
-
-2. **Stefans formel**:
-
-   ```
-   I = 2.5 × √322
-   I = 2.5 × 17.94
-   I ≈ 44.8 cm
-   ```
-
-3. **Golds formel**:
-   ```
-   11 cm gräns för 400 kg ko
-   Faktisk tjocklek: 44.8 cm
-   Resultat: 44.8 > 11 → KON KLARAR SIG ✓
-   ```
-
-**Varför detta exempel är intressant:**
-Februari 1942 var **inte** en extremt kall månad för sig själv. Men den kom _efter_ en hel kallperiod från oktober. Det visar varför vi räknar Net FDD från oktober—det är den kumulativa effekten som skapar tjock is, inte en enstaka kall dag.
-
-**Validering mot verklighet:**
-Malmö hamn hade faktiskt tjock is vinterarna under 1940-talet. Denna beräkning matchar historiska observationer från SMHI och lokala arkiv.
+Se [Detaljerad fysik-förklaring](./docs/physics.md) för formler och härledning.
 
 ---
 
@@ -319,6 +156,14 @@ Kort, logisk förklaring:
 - **Logiskt:** Tydlig separation av konstanter och variabler, kod och matematik.
 - **Pedagogiskt:** Förklarar både för användare och utvecklare hur allt hänger ihop.
 - **Fullstack:** Från databas till animation.
+
+---
+
+## 📚 Läs mer
+
+- **[Detaljerad fysik-förklaring](./docs/physics.md)** — Stefan-formeln, FDD, Gold's regel
+- **[Implementering i detalj](./docs/implementation.md)** — Backend API, React hooks, data pipeline
+- **[Historiskt exempel: Februari 1942](./docs/example-1942.md)** — En av Sveriges kallaste vintrar på 500 år, -28°C i Malmö
 
 ---
 

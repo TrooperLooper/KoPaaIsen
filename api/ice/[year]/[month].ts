@@ -25,10 +25,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { year: yearStr, month: monthStr } = req.query;
-
-    const year = parseInt(yearStr as string, 10);
-    const month = parseInt(monthStr as string, 10);
+    const year = parseInt(req.query.year as string, 10);
+    const month = parseInt(req.query.month as string, 10);
 
     const VALID_MONTHS = [10, 11, 12, 1, 2, 3, 4, 5];
     const MIN_YEAR = 1917;
