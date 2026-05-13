@@ -149,18 +149,15 @@ export default function CalculationModal({
         </div>
 
         {/* Result Section */}
-        <div className="mt-12 mb-6 pb-6 text-center">
-          <p className="inter-regular text-gray-700 mt-10 mb-4 text-base">
+        <div className="mt-20 mb-6 pb-6 text-center">
+          <p className="inter-regular text-gray-700 mb-4 text-base">
             Så minst <span className="font-bold text-red-700">11</span> cm is
             krävdes för en <span className="text-green-700 font-bold">400</span>{" "}
-            kg ko,
-            <p>
-              och den tjockaste isen i {monthName} {year} var{" "}
-              <span className="font-bold underline text-red-700">
-                {thickness.toFixed(1)} cm
-              </span>
-              .
-            </p>
+            kg ko, och den tjockaste isen i {monthName} {year} var{" "}
+            <span className="font-bold underline text-red-700">
+              {thickness.toFixed(1)} cm
+            </span>
+            .
           </p>
           {thickness >= 11 ? (
             <p className="bevan-regular text-green-700 font-semibold text-lg mt-8">
