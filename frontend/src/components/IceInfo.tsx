@@ -49,7 +49,7 @@ export default function IceInfo({
         <p className="text-white text-xs sm:text-sm font-semibold text-center">
           I {monthName} {year} var isen {thickness?.toFixed(1) || "—"} cm.
           <br />
-          Klicka för att se hur vi beräknade det
+          Klicka för att se hur det beräknades
         </p>
         <button
           onClick={onInfoClick}
