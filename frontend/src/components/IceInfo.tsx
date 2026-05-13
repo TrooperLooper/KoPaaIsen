@@ -40,8 +40,8 @@ export default function IceInfo({ year, month, thickness, onInfoClick }: Props) 
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
-      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 px-6">
-        <p className="text-white text-sm font-semibold text-center sm:text-left">
+      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 px-3 sm:px-6">
+        <p className="text-white text-xs sm:text-sm font-semibold text-center sm:text-left">
           I {monthName} {year} var isen {thickness?.toFixed(1) || "—"} cm.<br className="sm:hidden" />
           Klicka för att se hur det beräknades
         </p>

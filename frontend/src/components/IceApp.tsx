@@ -107,7 +107,7 @@ export default function IceApp() {
           style={{ marginTop: `-${controlsOverlap}px`, position: "relative" }}
         >
           {/* Dials side by side */}
-          <div className="flex justify-center gap-8 px-4">
+          <div className="flex justify-center gap-4 sm:gap-8 px-4">
             <div className="flex-1">
               <YearDial value={year} onChange={setYear} disabled={isLoading || !!result} />
             </div>
