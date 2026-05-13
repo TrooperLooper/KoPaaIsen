@@ -23,7 +23,9 @@ export default function IceApp() {
   }, []);
 
   const parentWidth = Math.min(windowWidth - 32, 384);
-  const canvasWidth = 1.8 * parentWidth;
+  const desiredCanvasWidth = 1.8 * parentWidth;
+  const maxCanvasWidth = windowWidth - 16; // Cap to viewport width with 8px margin
+  const canvasWidth = Math.min(desiredCanvasWidth, maxCanvasWidth);
   const canvasHeight = Math.min(650, canvasWidth);
   const controlsOverlap = canvasHeight * (120 / 650);
 
