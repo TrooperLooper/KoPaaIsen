@@ -40,7 +40,7 @@ export default function IceInfo({ year, month, thickness, onInfoClick }: Props) 
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
-      <div className="grid grid-cols-2 gap-3 items-center px-3 sm:px-6 w-full max-w-sm">
+      <div className="grid grid-cols-2 gap-1 sm:gap-3 items-center px-2 sm:px-6 w-11/12">
         <p className="text-white text-xs sm:text-sm font-semibold">
           I {monthName} {year} var isen {thickness?.toFixed(1) || "—"} cm.<br />
           Klicka för att se hur
