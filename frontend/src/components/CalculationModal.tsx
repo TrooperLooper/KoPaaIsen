@@ -51,90 +51,99 @@ export default function CalculationModal({
           Hur vet vi om isen kunde bära?
         </h2>
 
-        <p className="inter-regular text-gray-700 mb-12 text-base text-center">
-          För att få svar på detta behöver vi veta två saker:
-          <p>1. Hur tjock is en ko kräver. 2. Hur tjock isen faktiskt var.</p>
-        </p>
-
-        {/* Formula Sections Side by Side */}
+        {/* Formula Sections Side by Side Mobile version */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
           {/* Gold's Formula Section */}
-          <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
-            <h3 className="inter-bold uppercase text-gray-900 text-base">
-              Golds formel
-            </h3>
-            <p className="inter-regular text-gray-700 text-xs lowercase mt-1 mb-3">
-              – hur tjock is krävs?
-            </p>
-            <p className="inter-bold text-gray-900 mb-3 text-sm">P = A × H²</p>
-            <div className="inter-regular text-gray-700 mb-3 text-sm text-center space-y-1">
-              <div className="inter-italic">
-                där P = kons vikt (
-                <span className="text-green-700 font-bold">400</span> kg)
+          <div>
+            <div className="bg-black text-white p-3 text-center text-base font-bold tracking-wide mb-3">
+              Hur tjock is en ko kräver
+            </div>
+            <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
+              <h3 className="inter-bold uppercase text-gray-900 text-base">
+                Golds formel
+              </h3>
+              <p className="inter-regular text-gray-700 text-xs lowercase mt-1 mb-3">
+                – hur tjock is krävs?
+              </p>
+              <p className="inter-bold text-gray-900 mb-3 text-sm">
+                P = A × H²
+              </p>
+              <div className="inter-regular text-gray-700 mb-3 text-sm text-center space-y-1">
+                <div className="inter-italic">
+                  där P = kons vikt (
+                  <span className="text-green-700 font-bold">400</span> kg)
+                </div>
+                <div className="inter-italic">
+                  A = isens bärförmåga per cm²{" "}
+                  <p>
+                    (<span className="text-green-700 font-bold">3.5</span>{" "}
+                    kg/cm² för saltvatten)
+                  </p>
+                </div>
+                <div className="inter-italic">H = tjockleken vi söker.</div>
               </div>
-              <div className="inter-italic">
-                A = isens bärförmåga per cm²{" "}
-                <p>
-                  (<span className="text-green-700 font-bold">3.5</span> kg/cm²
-                  för saltvatten)
+              <div className="bg-white p-4 rounded font-mono text-sm mt-auto text-center">
+                <p className="inter-regular">
+                  <span className="text-green-700 font-bold">400</span> ={" "}
+                  <span>3.5</span> × H²
+                </p>
+                <p className="mt-2 inter-regular">
+                  H² = <span className="text-red-700 font-bold">114.3</span>
+                </p>
+                <p className="mt-2 inter-regular">
+                  H = <span className="text-red-700 font-bold">~11 cm</span>
                 </p>
               </div>
-              <div className="inter-italic">H = tjockleken vi söker.</div>
-            </div>
-            <div className="bg-white p-4 rounded font-mono text-sm mt-auto text-center">
-              <p className="inter-regular">
-                <span className="text-green-700 font-bold">400</span> ={" "}
-                <span>3.5</span> × H²
-              </p>
-              <p className="mt-2 inter-regular">
-                H² = <span className="text-red-700 font-bold">114.3</span>
-              </p>
-              <p className="mt-2 inter-regular">
-                H = <span className="text-red-700 font-bold">~11 cm</span>
-              </p>
             </div>
           </div>
 
           {/* Stefan's Formula Section */}
-          <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
-            <h3 className="inter-bold text-gray-900 text-base uppercase">
-              Stefans formel
-            </h3>
-            <p className="inter-regular text-gray-700 text-xs lowercase mt-1 mb-3">
-              – hur tjock var isen?
-            </p>
-            <p className="inter-italic text-gray-700 mb-3 text-sm">
-              Bygger på netto frostgraddygn: varje grad under 0°C adderas per
-              dag, varje grad över subtraheras. −5°C i tio dagar = 50
-              frostgraddygn, men töväder äter upp dem igen.
-            </p>
-            <p className="inter-regular text-gray-700 mb-3 text-sm">
-              Vintern fram till {monthName} {year} hade:{" "}
-              <p>
-                {" "}
-                <span className="text-red-700 font-bold">
-                  {fdd.toFixed(0)}{" "}
-                </span>
-                netto frostgraddygn{" "}
+          <div>
+            <div className="bg-black text-white p-3 text-center text-base font-bold tracking-wide mb-3">
+              Hur tjock isen faktiskt var
+            </div>
+            <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
+              <h3 className="inter-bold text-gray-900 text-base uppercase">
+                Stefans formel
+              </h3>
+              <p className="inter-regular text-gray-700 text-xs lowercase mt-1 mb-3">
+                – hur tjock var isen?
               </p>
-            </p>
-            <div className="bg-white p-4 rounded font-mono text-sm mt-auto text-center">
-              <p className="inter-regular">
-                I = <span className="text-green-700 font-bold">2.5</span> × √
-                <span className="text-red-700 font-bold">{fdd.toFixed(0)}</span>
+              <p className="inter-italic text-gray-700 mb-3 text-sm">
+                Bygger på netto frostgraddygn: varje grad under 0°C adderas per
+                dag, varje grad över subtraheras. −5°C i tio dagar = 50
+                frostgraddygn, men töväder äter upp dem igen.
               </p>
-              <p className="mt-2 inter-regular">
-                I = <span className="text-green-700 font-bold">2.5</span> ×{" "}
-                <span className="text-red-700 font-bold">
-                  {Math.sqrt(fdd).toFixed(1)}
-                </span>
+              <p className="inter-regular text-gray-700 mb-3 text-sm">
+                Vintern fram till {monthName} {year} hade:{" "}
+                <p>
+                  {" "}
+                  <span className="text-red-700 font-bold">
+                    {fdd.toFixed(0)}{" "}
+                  </span>
+                  netto frostgraddygn{" "}
+                </p>
               </p>
-              <p className="mt-2 inter-regular">
-                I ={" "}
-                <span className="text-red-700 font-bold">
-                  {thickness.toFixed(1)} cm
-                </span>
-              </p>
+              <div className="bg-white p-4 rounded font-mono text-sm mt-auto text-center">
+                <p className="inter-regular">
+                  I = <span className="text-green-700 font-bold">2.5</span> × √
+                  <span className="text-red-700 font-bold">
+                    {fdd.toFixed(0)}
+                  </span>
+                </p>
+                <p className="mt-2 inter-regular">
+                  I = <span className="text-green-700 font-bold">2.5</span> ×{" "}
+                  <span className="text-red-700 font-bold">
+                    {Math.sqrt(fdd).toFixed(1)}
+                  </span>
+                </p>
+                <p className="mt-2 inter-regular">
+                  I ={" "}
+                  <span className="text-red-700 font-bold">
+                    {thickness.toFixed(1)} cm
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
