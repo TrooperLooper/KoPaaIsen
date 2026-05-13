@@ -40,14 +40,14 @@ export default function IceInfo({ year, month, thickness, onInfoClick }: Props) 
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
-      <div className="grid grid-cols-2 gap-1 sm:gap-3 items-center px-2 sm:px-6 w-11/12">
-        <p className="text-white text-xs sm:text-sm font-semibold">
+      <div className="flex items-center justify-center gap-1 sm:gap-3 px-2 sm:px-6 w-11/12">
+        <p className="text-white text-xs sm:text-sm font-semibold text-center">
           I {monthName} {year} var isen {thickness?.toFixed(1) || "—"} cm.<br />
           Klicka för att se hur
         </p>
         <button
           onClick={onInfoClick}
-          className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-colors cursor-pointer justify-self-end"
+          className="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-colors cursor-pointer text-sm sm:text-base"
         >
           i
         </button>
