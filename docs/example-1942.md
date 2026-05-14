@@ -1,8 +1,10 @@
-# Exempelberäkning: Februari 1942
+![Krigsvintern 1942](../frontend/src/assets/krigsvintern.png)
+
+# Exempelberäkning: Malmö hamn Februari 1942
 
 ## Historisk kontext
 
-Vintern 1941–1942 var en av de kallaste under 1900-talet i Sverige. Faktiskt var vintern **1942/43 den kallaste på 500 år**. Malmö uppmätte sitt rekord för lägsta temperatur under denna period: **-28°C** — en sällsynt hård vinter som inte upprepats sedan.
+Vintern 1941–1942 var en av de kallaste under 1900-talet i Sverige. Faktiskt var vintern **1942/43 den kallaste på 500 år**. Malmö uppmätte sitt rekord för lägsta temperatur under denna period: **-28°C** — ett vittnesmål om en ovanligt hård vinter som inte upprepats sedan.
 
 Vi tittar på vad som hände från oktober 1941 till februari 1942 under denna extrema vinterperiod.
 
