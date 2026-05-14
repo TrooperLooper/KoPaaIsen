@@ -74,13 +74,6 @@ export default function TestButton({
     whiteSpace: "nowrap",
   };
 
-  // Apply CALCULATING state animation
-  if (isCalculating) {
-    buttonStyle = {
-      ...buttonStyle,
-      animation: "textPulse 2.5s ease-in-out infinite",
-    };
-  }
 
   // Apply REWIND state styles
   if (hasResult && animationComplete) {
@@ -96,11 +89,9 @@ export default function TestButton({
   return (
     <>
       <style>{`
-        @keyframes textPulse {
-          0%   { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-          10%  { text-shadow: 0 0 0px rgba(255, 255, 255, 0); }
-          20%  { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-          100% { text-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+        @keyframes charReveal {
+          0%, 5% { opacity: 0; }
+          10%, 100% { opacity: 1; }
         }
 
         @keyframes rewindPulse {
@@ -115,7 +106,19 @@ export default function TestButton({
         }
       `}</style>
       <button onClick={handleClick} disabled={isDisabled} style={buttonStyle}>
-        {text}
+        {isCalculating
+          ? text.split("").map((char, i) => (
+              <span
+                key={i}
+                style={{
+                  animation: `charReveal 2.5s ease-in-out ${i * 0.15}s infinite`,
+                  display: "inline",
+                }}
+              >
+                {char}
+              </span>
+            ))
+          : text}
       </button>
     </>
   );
