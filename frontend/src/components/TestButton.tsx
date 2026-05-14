@@ -57,7 +57,7 @@ export default function TestButton({
 
   let buttonStyle: React.CSSProperties = {
     backgroundColor: bgColor,
-    width: "160px",
+    width: "147px",
     padding: "0.5rem 1rem",
     borderRadius: "2rem",
     color: "white",
@@ -89,10 +89,10 @@ export default function TestButton({
     <>
       <style>{`
         @keyframes charPulse {
-          0%   { opacity: 1; }
-          10%  { opacity: 0.2; }
-          20%  { opacity: 1; }
-          100% { opacity: 1; }
+          0%   { color: white; }
+          10%  { color: rgba(255, 255, 255, 0.2); }
+          20%  { color: white; }
+          100% { color: white; }
         }
 
         @keyframes rewindPulse {
