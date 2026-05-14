@@ -78,7 +78,7 @@ export default function TestButton({
   if (hasResult && animationComplete) {
     buttonStyle = {
       ...buttonStyle,
-      width: "156px",
+      width: "145px",
       padding: "0.4rem 0.9rem",
       border: "2px solid #E6A100",
       animation: "rewindPulse 1.8s ease-in-out infinite",
@@ -113,7 +113,7 @@ export default function TestButton({
                 key={i}
                 style={{
                   animation: `charPulse 2.5s ease-in-out ${i * 0.12}s infinite`,
-                  display: "inline-block",
+                  display: "inline",
                 }}
               >
                 {char}
