@@ -56,7 +56,7 @@ export default function CalculationModal({
         </p>
 
         {/* Formula Sections Side by Side Mobile version */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 mb-6">
           {/* Gold's Formula Section */}
           <div>
             <div className="bg-[#CC7721] text-white p-3 text-center text-base font-bold tracking-wide mb-3">
