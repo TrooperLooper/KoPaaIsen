@@ -74,6 +74,14 @@ export default function TestButton({
     whiteSpace: "nowrap",
   };
 
+  // Apply CALCULATING state animation
+  if (isCalculating) {
+    buttonStyle = {
+      ...buttonStyle,
+      animation: "textPulse 2.5s ease-in-out infinite",
+    };
+  }
+
   // Apply REWIND state styles
   if (hasResult && animationComplete) {
     buttonStyle = {
@@ -107,13 +115,7 @@ export default function TestButton({
         }
       `}</style>
       <button onClick={handleClick} disabled={isDisabled} style={buttonStyle}>
-        {isCalculating ? (
-          <span style={{ animation: "textPulse 2.5s ease-in-out infinite" }}>
-            {text}
-          </span>
-        ) : (
-          text
-        )}
+        {text}
       </button>
     </>
   );
