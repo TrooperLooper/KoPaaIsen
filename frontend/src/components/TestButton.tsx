@@ -53,30 +53,76 @@ export default function TestButton({
     }
   };
 
+  const isCalculating = isLoading || (hasResult && !animationComplete);
+
+  let buttonStyle: React.CSSProperties = {
+    backgroundColor: bgColor,
+    width: "160px",
+    padding: "0.5rem 1rem",
+    borderRadius: "2rem",
+    color: "white",
+    fontSize: "1rem",
+    fontWeight: "bold",
+    letterSpacing: "0.05em",
+    textTransform: "uppercase",
+    border: "none",
+    cursor: isDisabled ? "not-allowed" : "pointer",
+    opacity: isDisabled ? 0.5 : 1,
+    transition: "all 0.3s ease",
+    margin: "0 auto",
+    display: "block",
+    whiteSpace: "nowrap",
+  };
+
+  // Apply REWIND state styles
+  if (hasResult && animationComplete) {
+    buttonStyle = {
+      ...buttonStyle,
+      border: "2px solid #a16207",
+      animation: "rewindPulse 1.8s ease-in-out infinite",
+    };
+  }
+
   return (
-    <button
-      onClick={handleClick}
-      disabled={isDisabled}
-      style={{
-        backgroundColor: bgColor,
-        width: "180px",
-        padding: "0.5rem 1rem",
-        borderRadius: "2rem",
-        color: "white",
-        fontSize: "1rem",
-        fontWeight: "bold",
-        letterSpacing: "0.05em",
-        textTransform: "uppercase",
-        border: "none",
-        cursor: isDisabled ? "not-allowed" : "pointer",
-        opacity: isDisabled ? 0.5 : 1,
-        transition: "all 0.3s ease",
-        margin: "0 auto",
-        display: "block",
-        whiteSpace: "nowrap",
-      }}
-    >
-      {text}
-    </button>
+    <>
+      <style>{`
+        @keyframes charPulse {
+          0%   { opacity: 1; }
+          10%  { opacity: 0.2; }
+          20%  { opacity: 1; }
+          100% { opacity: 1; }
+        }
+
+        @keyframes rewindPulse {
+          0%, 100% {
+            border-color: #a16207;
+            box-shadow: 0 0 8px rgba(161, 98, 7, 0.4);
+          }
+          50% {
+            border-color: #d97706;
+            box-shadow: 0 0 18px rgba(217, 119, 6, 0.6);
+          }
+        }
+      `}</style>
+      <button
+        onClick={handleClick}
+        disabled={isDisabled}
+        style={buttonStyle}
+      >
+        {isCalculating
+          ? text.split("").map((char, i) => (
+              <span
+                key={i}
+                style={{
+                  animation: `charPulse 2.5s ease-in-out ${i * 0.12}s infinite`,
+                  display: "inline-block",
+                }}
+              >
+                {char}
+              </span>
+            ))
+          : text}
+      </button>
+    </>
   );
 }
