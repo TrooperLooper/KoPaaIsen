@@ -20,6 +20,7 @@ input[type="range"]::-webkit-slider-thumb {
   border: 3px solid #000;
   border-radius: 50%;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Firefox thumb */
@@ -30,7 +31,7 @@ input[type="range"]::-moz-range-thumb {
   border: 3px solid #000;
   border-radius: 50%;
   cursor: pointer;
-  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Firefox track */
