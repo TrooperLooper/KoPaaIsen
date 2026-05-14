@@ -78,7 +78,9 @@ export default function TestButton({
   if (hasResult && animationComplete) {
     buttonStyle = {
       ...buttonStyle,
-      border: "2px solid #a16207",
+      width: "156px",
+      padding: "0.4rem 0.9rem",
+      border: "2px solid #E6A100",
       animation: "rewindPulse 1.8s ease-in-out infinite",
     };
   }
@@ -95,20 +97,16 @@ export default function TestButton({
 
         @keyframes rewindPulse {
           0%, 100% {
-            border-color: #a16207;
-            box-shadow: 0 0 8px rgba(161, 98, 7, 0.4);
+            border-color: #E6A100;
+            box-shadow: 0 0 8px rgba(230, 161, 0, 0.4);
           }
           50% {
-            border-color: #d97706;
-            box-shadow: 0 0 18px rgba(217, 119, 6, 0.6);
+            border-color: #E6A100;
+            box-shadow: 0 0 18px rgba(230, 161, 0, 0.6);
           }
         }
       `}</style>
-      <button
-        onClick={handleClick}
-        disabled={isDisabled}
-        style={buttonStyle}
-      >
+      <button onClick={handleClick} disabled={isDisabled} style={buttonStyle}>
         {isCalculating
           ? text.split("").map((char, i) => (
               <span
