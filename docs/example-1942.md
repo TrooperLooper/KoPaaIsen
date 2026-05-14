@@ -1,4 +1,4 @@
-![Krigsvintern 1942](../frontend/src/assets/krigsvintern.png)
+![Krigsvintern 1942](/frontend/src/assets/krigsvintern.png)
 
 # Exempelberäkning: Malmö hamn Februari 1942
 
