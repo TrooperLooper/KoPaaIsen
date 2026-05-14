@@ -88,11 +88,11 @@ export default function TestButton({
   return (
     <>
       <style>{`
-        @keyframes charPulse {
-          0%   { color: white; }
-          10%  { color: rgba(255, 255, 255, 0.2); }
-          20%  { color: white; }
-          100% { color: white; }
+        @keyframes textPulse {
+          0%   { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+          10%  { text-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+          20%  { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+          100% { text-shadow: 0 0 0px rgba(255, 255, 255, 0); }
         }
 
         @keyframes rewindPulse {
@@ -107,19 +107,13 @@ export default function TestButton({
         }
       `}</style>
       <button onClick={handleClick} disabled={isDisabled} style={buttonStyle}>
-        {isCalculating
-          ? text.split("").map((char, i) => (
-              <span
-                key={i}
-                style={{
-                  animation: `charPulse 2.5s ease-in-out ${i * 0.12}s infinite`,
-                  display: "inline",
-                }}
-              >
-                {char}
-              </span>
-            ))
-          : text}
+        {isCalculating ? (
+          <span style={{ animation: "textPulse 2.5s ease-in-out infinite" }}>
+            {text}
+          </span>
+        ) : (
+          text
+        )}
       </button>
     </>
   );
