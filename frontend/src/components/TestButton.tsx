@@ -57,7 +57,7 @@ export default function TestButton({
 
   let buttonStyle: React.CSSProperties = {
     backgroundColor: bgColor,
-    width: "147px",
+    width: "145px",
     padding: "0.5rem 1rem",
     borderRadius: "2rem",
     color: "white",
@@ -79,10 +79,7 @@ export default function TestButton({
   if (hasResult && animationComplete) {
     buttonStyle = {
       ...buttonStyle,
-      width: "145px",
-      padding: "0.4rem 0.9rem",
-      border: "2px solid #E6A100",
-      animation: "rewindPulse 1.8s ease-in-out infinite",
+      animation: "bgPulse 1.8s ease-in-out infinite",
     };
   }
 
@@ -94,14 +91,12 @@ export default function TestButton({
           10%, 100% { opacity: 1; }
         }
 
-        @keyframes rewindPulse {
+        @keyframes bgPulse {
           0%, 100% {
-            border-color: #E6A100;
-            box-shadow: 0 0 8px rgba(230, 161, 0, 0.4);
+            background-color: #eab308;
           }
           50% {
-            border-color: #E6A100;
-            box-shadow: 0 0 18px rgba(230, 161, 0, 0.6);
+            background-color: #f0b923;
           }
         }
       `}</style>
