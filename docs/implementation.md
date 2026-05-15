@@ -94,6 +94,7 @@ Användaren ser: En ko som antingen står på isen eller plumsar
 ## Tech Stack
 
 - **Frontend:** React + TypeScript + Tailwind + Rive (animation) + Zod (runtime-validering)
-- **Backend:** Express + TypeScript + Zod (runtime-validering) + Jest (enhetstester)
+- **Backend:** Express + TypeScript + Zod (runtime-validering) + Winston (logging) + Jest (enhetstester)
+- **Säkerhet:** CORS origin-whitelist, express-rate-limit (60 req/min per IP)
 - **Database:** Turso (LibSQL cloud database)
 - **Data:** 39 000+ dagsobservationer från SMHI (1917–2026)
