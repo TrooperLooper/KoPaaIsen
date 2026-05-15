@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { MONTH_NAMES } from "../constants/months";
 
 interface Props {
   year: number;
@@ -22,22 +23,7 @@ export default function IceInfo({
     return () => clearTimeout(timer);
   }, [year, month]);
 
-  const monthNames = [
-    "Januari",
-    "Februari",
-    "Mars",
-    "April",
-    "Maj",
-    "Juni",
-    "Juli",
-    "Augusti",
-    "September",
-    "Oktober",
-    "November",
-    "December",
-  ];
-
-  const monthName = monthNames[month - 1] || "Februari";
+  const monthName = MONTH_NAMES[month];
 
   return (
     <div

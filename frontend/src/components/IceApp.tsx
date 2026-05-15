@@ -7,6 +7,7 @@ import CowAnimation from "./CowAnimation";
 import Snowfall from "./Snowfall";
 import IceInfo from "./IceInfo";
 import CalculationModal from "./CalculationModal";
+import { calculateCanvasMetrics } from "../utils/canvasMetrics";
 
 export default function IceApp() {
   const [year, setYear] = useState(1942);
@@ -22,12 +23,7 @@ export default function IceApp() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const parentWidth = Math.min(windowWidth - 32, 384);
-  const desiredCanvasWidth = 1.8 * parentWidth;
-  const maxCanvasWidth = windowWidth - 16; // Cap to viewport width with 8px margin
-  const canvasWidth = Math.min(desiredCanvasWidth, maxCanvasWidth);
-  const canvasHeight = Math.min(650, canvasWidth);
-  const controlsOverlap = canvasHeight * (120 / 650);
+  const { canvasHeight, controlsOverlap } = calculateCanvasMetrics(windowWidth);
 
   const handleReset = () => {
     clearResult();
