@@ -47,6 +47,11 @@ const holdsCow = maxIceCm >= COW_THRESHOLD_CM; // 11 cm minimum
 
 ## Frontend-rendering: Resultatet blir visuellt
 
+Delade konstanter och hjälpfunktioner lever i egna moduler:
+
+- `constants/months.ts` — `MONTH_NAMES` och `MONTHS` (Oct–Maj), importeras av alla komponenter som behöver månadsnamn
+- `utils/canvasMetrics.ts` — beräknar canvas-dimensioner utifrån fönsterbredd; `IceApp` anropar `calculateCanvasMetrics(windowWidth)` istället för att ha inline-matte
+
 Systemet skickar tillbaka:
 
 - `maxIceCm` — den tjockaste isen under perioden
