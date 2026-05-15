@@ -17,44 +17,23 @@ Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" o
 - **Om isen är tillräckligt tjock:** Kon står stabilt på isen (och den animerade kossan är nöjd)
 - **Om isen är för tunn:** Kon åker genom isen (med överraskad min och fladdrande öron)
 
-Allt bygger på:
-
-1. **Historiska data** CSV filer från SMHI (39 381 dagsobservationer, tre väderstationer, fr. 1917–2026)
-2. **Vetenskaplig modellering** (Stefan-formeln för istjocklek, Golds regel för bärighet)
-3. **Backend-kalkyl** (FDD-ackumulering, validering)
-4. **Frontend-visualisering** (React, interaktiva Rive-animationer, responsiv design)
-
----
-
-## Datakälla
-
-- SMHI:s historiska temperaturdata för Malmö hamn, 1917–2026
-- Tre väderstationer, sammanslagna och deduplicerade
-- Data lagras i SQLite för snabb hämtning
-
----
-
-## Hur det fungerar
+Tekniskt pipeline:
 
 **Stack:** React + TypeScript + Tailwind + Rive | Express + TypeScript + Winston + Zod | Turso (SQLite cloud)
 
-**Pipeline:** SMHI-data → Turso → Backend API (`GET /api/ice?year=:year&month=:month`) → React + Rive animation
+**Pipeline:** SMHI-data (1917–2026) → Turso → Backend API (`GET /api/ice?year=:year&month=:month`) → Zod-validering → React UI + Rive animation
 
-**Logik:**
+**Logik bakom:** FDD-ackumulering från oktober, Stefan-formeln för istjocklek, Gold's regel för bärighet (11 cm minimum för 400 kg ko).
 
-- FDD-ackumulering (Freezing Degree Days) från oktober
-- Stefan-formeln för istjocklek
-- Gold's regel för bärighet (11 cm minimum för 400 kg ko)
-
-Se [Detaljerad implementering](./docs/implementation.md) för full arkitektur.
+Se [Detaljerad implementering](./docs/implementation.md) för full arkitektur och kod.
 
 ---
 
 ## Fysiken kort förklarat
 
-Istjocklek beror på **kumulativ kyla** (FDD) Altså en längre fysperiod, inte enstaka kallnätter. Stefan-formeln från 1800-talet beskriver tillväxten matematiskt. Gold's regel säger att 11 cm tjock is räcker för en 400 kg ko på Malmös saltvatten (A = 3.5 kg/cm²).
+Istjocklek beror på **kumulativ kyla** (FDD) — alltså en längre frysperiod, inte enstaka kallnätter. Stefan-formeln från 1800-talet beskriver tillväxten matematiskt. Gold's regel säger att 11 cm tjock is räcker för en 400 kg ko på Malmös saltvatten (A = 3.5 kg/cm²).
 
-Se [Detaljerad fysik-förklaring](./docs/physics.md) för formler och konklusioner.
+Se [Detaljerad fysik-förklaring](./docs/physics.md) för formler och härledning.
 
 ---
 
@@ -108,46 +87,26 @@ En siffra "13.8 cm" säger mindre än att _se_ en glad ko på stabil is.
 
 ## Komponenter & Arkitektur
 
-- **Frontend:** React + Vite + TypeScript + Tailwind + Zod (runtime-validering)
-- **Animation:** Rive (statemachine: stående, plums, idle animationer)
-- **Backend:** Node.js + Express + TypeScript + Zod (runtime-validering) + Jest (enhetstester)
-- **Databas:** Turso (SQLite cloud, 39 000+ dagar, 1917–2026)
+Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implementering](./docs/implementation.md) för hur varje lager fungerar — Zod-validering, pure funktioner, rate limiting, structured logging, allt den klassiska fullstack-grejen.
 
 ### API
 
-- `GET /api/ice?year=:year&month=:month` — returnerar tjockaste isen för vald månad, samt om kon klarar sig
+- `GET /api/ice?year=:year&month=:month` — returnerar tjockaste isen för vald månad och om kon klarar sig
+- Visar även FDD-ackumulering, frys/töadagar för att användaren kan förstå beräkningen
+- **CalculationModal** förklarar exakt varför resultatet blev så
 
 ---
 
 ## Vad jag lärde mig och vad som var tufft
 
 **Rive State Machine & Data Binding**
-Integreringen av Rive var initialt logisk, men de nya updaterade detaljerna med data binding var knepiga men lärde mer om hur det fungerar. Jag insåg att jag hade för många states och behövde förenkla till ett start (idle state) och sen en enda boolean.
-Rive känns väldigt bekant, som det gamla Flash. Det var kul att lära sig, och speciellt state machines som gör det enkelt att koppla data till olika animationer.
+Rive-integreringen var helt okej — men jag insåg att fewer states är bättre. Istället för att försöka modellera allt fick jag göra mig av med komplexiteten och använda en enda boolean. Det blev både enklare och bättre.
 
 **FDD-logik & Backend-design**
 Jag ville först beräkna FDD i frontend (hur många frysdagar), men när jag tänkte på hur väder inte bara fryser men också töar på vintern läste jag på mer om Stefan-formeln insåg jag att det hörde hemma i backend — där jag redan hade all historisk data. Det blev både renare och mer korrekt. **Lärdom:** Förstå vad som fungerar på riktigt och inte bara som modell i ett labb.
 
 **Datahantering — SQLite över Excel**
 När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-stationer krashade Excel. SQLite blev räddningen — och en bra påminnelse om att välja verktyg efter problem, inte vana. Som MERN-utvecklare var det också värdefullt att träna mer på SQL igen.
-
----
-
-## InfoModal (för användaren)
-
-Kort, logisk förklaring:
-
-> För att isen ska bära en vuxen ko på 400 kg krävs minst 11 cm tjock is (Golds bärformel).
->
-> Från oktober 1941 till februari 1942 var det 64 frysdagar (totalt -327 grader). 3 dagar var det över 0°C, så isen smälte tillbaka lite.
->
-> Enligt Stefans istillväxtformel var tjockaste isen i februari: 48.2 cm.
->
-> Golds: 400 kg / 3.5 kg/cm² = 114.3 cm² → 11 cm min
-> Stefan: 2.5 × √322 = 48.2 cm
->
-> // Gold's rule: 11 cm is safe
-> result = iceThickness >= 11 ? "Safe for cow" : "Ice breaks";
 
 ---
 
