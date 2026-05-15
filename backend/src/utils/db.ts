@@ -1,4 +1,5 @@
 import { createClient } from "@libsql/client";
+import logger from "./logger";
 
 const tursoUrl = process.env.TURSO_URL;
 const tursoToken = process.env.TURSO_TOKEN;
@@ -12,15 +13,13 @@ const db = createClient({
   authToken: tursoToken,
 });
 
-// Initialize and log connection
 (async () => {
   try {
     const result = await db.execute("SELECT COUNT(*) as count FROM weather_daily");
     const rowCount = result.rows[0]?.count || 0;
-    console.log(`✓ Connected to Turso`);
-    console.log(`✓ weather_daily table: ${rowCount} rows`);
+    logger.info(`Connected to Turso — weather_daily: ${rowCount} rows`);
   } catch (error) {
-    console.error("Failed to connect to Turso:", error);
+    logger.error("Failed to connect to Turso", { error });
   }
 })();
 
