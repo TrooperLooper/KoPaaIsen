@@ -1,6 +1,5 @@
 # ![Ko på Isen](frontend/public/kopaaisen_github.png)
 
-
 ## Ko på isen
 
 **En fullstack-applikation som kombinerar 100 års väderdata, vetenskaplig fysik och interaktiv animering för att svara på en rolig (men vetenskapligt komplex) fråga: Kunde en ko stå på isen i någon av Malmös historiska vintrar?**
@@ -39,7 +38,7 @@ Allt bygger på:
 
 **Stack:** React + TypeScript + Tailwind + Rive (state animation) | Express + TypeScript | Turso (SQLite cloud lösning)
 
-**Pipeline:** SMHI-data → Turso → Backend API (`/api/ice/:year/:month`) → React + Rive animation
+**Pipeline:** SMHI-data → Turso → Backend API (`GET /api/ice?year=:year&month=:month`) → React + Rive animation
 
 **Logik:**
 
@@ -109,21 +108,21 @@ En siffra "13.8 cm" säger mindre än att _se_ en glad ko på stabil is.
 
 ## Komponenter & Arkitektur
 
-- **Frontend:** React + Vite + TypeScript + Tailwind
+- **Frontend:** React + Vite + TypeScript + Tailwind + Zod (runtime-validering)
 - **Animation:** Rive (statemachine: stående, plums, idle animationer)
-- **Backend:** Node.js + Express + TypeScript
-- **Databas:** SQLite (39 000+ dagar, 1917–2026)
+- **Backend:** Node.js + Express + TypeScript + Zod (runtime-validering) + Jest (enhetstester)
+- **Databas:** Turso (SQLite cloud, 39 000+ dagar, 1917–2026)
 
 ### API
 
-- `/api/ice/:year/:month` — returnerar tjockaste isen för vald månad, samt om kon klarar sig
+- `GET /api/ice?year=:year&month=:month` — returnerar tjockaste isen för vald månad, samt om kon klarar sig
 
 ---
 
 ## Vad jag lärde mig och vad som var tufft
 
 **Rive State Machine & Data Binding**
-Integreringen av Rive var initialt logisk, men ordningen på data binding var knepig. Jag testade flera states (`holdsCow`, `isLoading`, `cow_anticipation`), men insåg att `hasResult` som en enda boolean löste allt — mindre komplexitet, bättre animationskontroll.
+Integreringen av Rive var initialt logisk, men de nya updaterade detaljerna med data binding var knepiga men lärde mer om hur det fungerar. Jag insåg att jag hade för många states och behövde förenkla till ett start (idle state) och sen en enda boolean.
 Rive känns väldigt bekant, som det gamla Flash. Det var kul att lära sig, och speciellt state machines som gör det enkelt att koppla data till olika animationer.
 
 **FDD-logik & Backend-design**
@@ -174,10 +173,12 @@ Kort, logisk förklaring:
 ## Roadmap
 
 1. Datamerge & import av CSV filer (klart)
-2. Backend-API med FDD-logik
-3. Frontend med React + Rive
-4. InfoModal-komponent
-5. Finputsning, README.md & deploy
+2. Backend-API med FDD-logik (klart)
+3. Frontend med React + Rive (klart)
+4. InfoModal-komponent (klart)
+5. Finputsning, README.md & deploy (klart)
+6. Zod runtime-validering — API-svar och databasrader valideras vid körtid (klart)
+7. Pure functions & enhetstester — fysiklogiken isolerad och testad med Jest (klart)
 
 ---
 
