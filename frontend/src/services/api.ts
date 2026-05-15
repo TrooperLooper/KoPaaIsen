@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || "";
 
 export async function fetchIceData(
   year: number,
-  month: number
+  month: number,
 ): Promise<IceResult> {
   const url = `${API_URL}/api/ice?year=${year}&month=${month}`;
 
@@ -19,9 +19,7 @@ export async function fetchIceData(
     } catch {
       // ignore JSON parse failure on error response
     }
-    throw new Error(
-      details || `Server error ${response.status}`
-    );
+    throw new Error(details || `Server error ${response.status}`);
   }
 
   const data = await response.json();

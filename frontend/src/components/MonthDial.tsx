@@ -34,6 +34,8 @@ export default function MonthDial({ value, onChange, disabled, year = 2000 }: Pr
         disabled={disabled}
         onChange={(e) => onChange(MONTHS[Number(e.target.value)].value)}
         className="w-full accent-blue-400 cursor-pointer disabled:cursor-not-allowed"
+        aria-label="Månad"
+        aria-valuetext={currentLabel}
       />
       <span className="w-full text-center text-3xl font-mono font-bold text-black">
         {currentLabel}

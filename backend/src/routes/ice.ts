@@ -11,10 +11,13 @@ const MAX_YEAR = 2026;
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 60,             // 60 requests per IP per minute
+  max: 60, // 60 requests per IP per minute
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: "Too many requests", details: "Max 60 requests per minute" },
+  message: {
+    error: "Too many requests",
+    details: "Max 60 requests per minute",
+  },
 });
 
 router.get("/", limiter, async (req: Request, res: Response) => {

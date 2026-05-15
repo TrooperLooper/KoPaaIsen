@@ -83,11 +83,23 @@ Jag gjorde Rive-animationen humoristisk, med en välkänd motion graphics-stil v
 
 En siffra "13.8 cm" säger mindre än att _se_ en glad ko på stabil is.
 
+### 6. **Tillgänglighetsdesign (a11y)**
+
+En Rive-animation är fantastisk visuell kommunikation men säger ingenting för en användare med skärmläsare. Jag ville att upplevelsen ska fungera för alla, inte bara de med syn.
+
+Appen är WCAG 2.2 AA-kompatibel med fokus på fyra lager:
+
+- **Semantik:** `lang="sv"`, `<main>`-landmark, korrekt `role="dialog"` på modalen
+- **Etiketter:** `aria-label` och `aria-valuetext` på alla interaktiva element (sliders, knappar)
+- **Skärmläsare:** `aria-live`-region som läser upp resultatet 2 sekunder in — när animationen är klar — inklusive en beskrivning av vad som händer med kon. Felmeddelanden avbryter omedelbart via `role="alert"`.
+- **Tangentbord:** Fokushantering i dialogen (trap + återgång till utlösande knapp), `aria-disabled` istället för `disabled` så att fokus aldrig försvinner under laddning, `:focus-visible`-stilar på sliders.
+- **Rörelse:** Animationerna är subtila och inte överväldigande, men vissa animationer deaktiveras för användare som har 'reduced-motion' aktiverat.
+
 ---
 
 ## Komponenter & Arkitektur
 
-Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implementering](./docs/implementation.md) för hur varje lager fungerar — Zod-validering, pure funktioner, rate limiting, structured logging, allt den klassiska fullstack-grejen.
+Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implementering](./docs/implementation.md) för hur varje lager fungerar. Zod-validering, pure funktioner, rate limiting, structured logging, allt den klassiska fullstack-grejen.
 
 ### API
 
@@ -100,13 +112,13 @@ Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implem
 ## Vad jag lärde mig och vad som var tufft
 
 **Rive State Machine & Data Binding**
-Rive-integreringen var helt okej — men jag insåg att fewer states är bättre. Istället för att försöka modellera allt fick jag göra mig av med komplexiteten och använda en enda boolean. Det blev både enklare och bättre.
+Rive-integreringen var knepig att få att fungera med dom nya data-binding uppdateringarna, men jag insåg att färre states är enklare i state machine. Istället för att försöka modellera flera states fick jag göra mig av med komplexiteten och använda en enda boolean. Det blev både enklare och bättre.
 
 **FDD-logik & Backend-design**
-Jag ville först beräkna FDD i frontend (hur många frysdagar), men när jag tänkte på hur väder inte bara fryser men också töar på vintern läste jag på mer om Stefan-formeln insåg jag att det hörde hemma i backend — där jag redan hade all historisk data. Det blev både renare och mer korrekt. **Lärdom:** Förstå vad som fungerar på riktigt och inte bara som modell i ett labb.
+Jag ville först beräkna FDD i frontend (hur många frysdagar), men när jag tänkte på hur väder inte bara fryser men också töar på vintern valde jag att göra beräkningarna utifrån "Stefan-formeln" och insåg jag att det hörde hemma i backend där jag redan hade all historisk data. Det blev både renare och mer korrekt.
 
 **Datahantering — SQLite över Excel**
-När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-stationer krashade Excel. SQLite blev räddningen — och en bra påminnelse om att välja verktyg efter problem, inte vana. Som MERN-utvecklare var det också värdefullt att träna mer på SQL igen.
+När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-stationer krashade Excel. SQLite blev räddningen och en bra påminnelse om att välja verktyg efter problem, inte vana. Som MERN-utvecklare var det också värdefullt att träna mer på SQL igen.
 
 ---
 
@@ -116,6 +128,7 @@ När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-sta
 - **Fysikaliskt korrekt:** FDD och istillväxt enligt vetenskapliga modeller.
 - **Logiskt:** Tydlig separation av konstanter och variabler, kod och matematik.
 - **Pedagogiskt:** Förklarar både för användare och utvecklare hur allt hänger ihop.
+- **Tillgänglighet:** WCAG 2.2 AA — skärmläsarstöd, tangentbordsnavigering och fokushantering utan att kompromissa med UX. Testad med Axe.
 - **Fullstack:** Från databas till animation.
 - **Claude:** Med agentisk co-coding kunde jag tänka större, gå djupare i min vision.
 
@@ -140,6 +153,7 @@ När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-sta
 7. Pure functions & enhetstester — fysiklogiken isolerad och testad med Jest (klart)
 8. Kodkvalitet — centraliserade konstanter, extraherad canvas-logik, ingen duplicering (klart)
 9. Säkerhetshärdning — CORS origin-whitelist, rate limiting, strukturerad Winston-loggning (klart)
+10. Tillgänglighet (WCAG 2.2 AA) — `lang`, landmarks, ARIA-etiketter, live regions, fokushantering, reduced-motion, tangentbord (klart)
 
 ---
 
@@ -154,7 +168,7 @@ Jag ville visa att jag kan:
 ✓ **Tänka i system** — Inte bara prata om systemer utan göra det förståeligt och underhållbart.
 ✓ **Matcha mot verklighet** — Resultaten matchar historiska väderdata och fysikaliska gränser
 
-Det här är mitt sätt att säga: **Jag verkligen uppskattar när kod, design och kontext går hand i hand.**
+Det här är mitt sätt att säga: **Jag verkligen uppskattar när fullstack kod, design och kontext går hand i hand.**
 
 ---
 

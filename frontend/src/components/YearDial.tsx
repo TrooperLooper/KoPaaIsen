@@ -17,6 +17,8 @@ export default function YearDial({ value, onChange, disabled }: Props) {
         disabled={disabled}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full accent-blue-400 cursor-pointer disabled:cursor-not-allowed"
+        aria-label="År"
+        aria-valuetext={String(value)}
       />
       <span className="w-full text-center text-3xl font-mono font-bold text-black">
         {value}

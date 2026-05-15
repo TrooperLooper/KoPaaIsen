@@ -35,7 +35,7 @@ export default function CowAnimation({ holdsCow, isLoading }: Props) {
   }, [holdsCow, isLoading, viewModelInstance, setHoldsCow, setHasResult]);
 
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex" }}>
+    <div style={{ width: "100%", height: "100%", display: "flex" }} aria-hidden="true">
       <RiveComponent />
     </div>
   );
