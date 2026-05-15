@@ -1,16 +1,5 @@
-export interface WeatherRow {
-  date: string;
-  temp_c: number;
-}
+import { z } from "zod";
+import { WeatherRowSchema, IceResultSchema } from "./schemas";
 
-export interface IceResult {
-  year: number;
-  month: number;
-  bestDate: string | null;
-  maxIceCm: number;
-  holdsCow: boolean;
-  fddAtPeak: number;
-  freezeDays: number;
-  thawDays: number;
-  message: string;
-}
+export type WeatherRow = z.infer<typeof WeatherRowSchema>;
+export type IceResult = z.infer<typeof IceResultSchema>;
