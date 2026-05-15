@@ -179,6 +179,7 @@ Kort, logisk förklaring:
 5. Finputsning, README.md & deploy (klart)
 6. Zod runtime-validering — API-svar och databasrader valideras vid körtid (klart)
 7. Pure functions & enhetstester — fysiklogiken isolerad och testad med Jest (klart)
+8. Kodkvalitet — centraliserade konstanter, extraherad canvas-logik, ingen duplicering (klart)
 
 ---
 
