@@ -43,6 +43,16 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+app.get("/debug-cors", (_req, res) => {
+  res.status(200).json({
+    raw_env: process.env.ALLOWED_ORIGINS ?? "(not set)",
+    parsed: allowedOrigins,
+    char_codes: allowedOrigins.map((o) =>
+      [...o].map((c) => c.charCodeAt(0))
+    ),
+  });
+});
+
 app.get("/health", async (_req, res) => {
   try {
     const result = await db.execute("SELECT COUNT(*) as count FROM weather_daily");
