@@ -1,5 +1,6 @@
 import db from "../utils/db";
-import { IceResult, WeatherRow } from "../types";
+import { IceResult } from "../types";
+import { WeatherRowsSchema } from "../schemas";
 
 const STEFAN_CONSTANT = 2.5;
 const COW_THRESHOLD_CM = 11;
@@ -26,7 +27,7 @@ export async function calculateIceForMonth(
     ],
   });
 
-  const allTemps = (result.rows as unknown as WeatherRow[]) || [];
+  const allTemps = WeatherRowsSchema.parse(result.rows);
 
   let fddSum = 0;
   let maxIceCm = 0;

@@ -1,11 +1,2 @@
-export interface IceResult {
-  year: number;
-  month: number;
-  bestDate: string | null;
-  maxIceCm: number;
-  holdsCow: boolean;
-  fddAtPeak: number;
-  freezeDays: number;
-  thawDays: number;
-  message: string;
-}
+// Type is derived from the Zod schema in ../schemas.ts so it always matches runtime validation.
+export type { IceResult } from "../schemas";
