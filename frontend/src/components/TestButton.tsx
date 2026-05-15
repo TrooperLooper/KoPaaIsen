@@ -7,7 +7,7 @@ interface Props {
   hasResult: boolean;
 }
 
-const ANIMATION_DURATION = 3000; // 3 seconds
+const ANIMATION_DURATION = 2000; // 2 seconds
 
 export default function TestButton({
   onClick,
@@ -94,9 +94,11 @@ export default function TestButton({
         @keyframes bgPulse {
           0%, 100% {
             background-color: #eab308;
+            transform: scale(1);
           }
           50% {
             background-color: #f0b923;
+            transform: scale(1.08);
           }
         }
       `}</style>
