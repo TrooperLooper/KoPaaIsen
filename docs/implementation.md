@@ -41,6 +41,7 @@ for (const row of rows) {
 **Logiken här:** Istjockleken är inte monotonisk — den kan minska när det töar. Därför spårar vi den maximala istjockleken och när den uppnåddes (`fddAtPeak`). Separationen gör det möjligt att enhetstesta fysiken utan en databaskoppling.
 
 **Jämför med Gold:**
+
 ```typescript
 const holdsCow = maxIceCm >= COW_THRESHOLD_CM; // 11 cm minimum
 ```
@@ -65,13 +66,35 @@ I React-appen:
    - `holdsCow === false` → kons modell sjunker genom isen (Rive-animation "plunge")
 
 2. **IceInfo** modal visar siffrorna på ett lättläst sätt:
-   - "Tjockaste isen: 44,8 cm"
-   - "Resultat: Kon klarar sig! ✓"
+   - "I {månad} {år} var isen {tjocklek} cm."
+   - Klickbar info-knapp som öppnar **CalculationModal**
 
-3. **CalculationModal** förklarar (på svenska) exakt varför resultatet blev så:
-   - Hur många frysdagar det var
-   - Hur Stefan-formeln applicerades
-   - Varför 11 cm är gränsen för Golds regel
+3. **CalculationModal** — transparensen bakom kulisserna
+   - Visar Golds formel: "Varför behövs 11 cm?"
+   - Visar Stefans formel: "Hur tjock blev isen verkligen?"
+   - Kombinerar matematiken för att förklara resultatet
+   - Exempel: "Från oktober 1941 till februari 1942 var det 64 frysdagar (-327 grader totalt). Stefan-formeln ger 48.2 cm. Gold's regel kräver 11 cm. Resultat: Kon klarar sig! ✓"
+
+Det är inte bara en siffra — det är en förklaring en användare kan förstå och verifiera själv.
+
+## Error Handling & Validering
+
+Fel kan hända på flera ställen. Vi fångar dem utan att krascha:
+
+**Database → Backend:**
+Zod validerar varje rad från Turso. Om en rad saknar `temp_c`, kastar Zod `ZodError` → routens `catch` fångar det → logg via Winston → 500-respons med detalj.
+
+**Route → Frontend:**
+Routens `try/catch` fångar alla fel (databas, fysik, det okända). Loggade via Winston. API returnerar alltid JSON med `error` och `details` fält.
+
+**Frontend API-anrop → Component:**
+`fetchIceData()` validerar svaret med Zod innan det når React-staten. Fel → `useIceData` hanterar → visar error modal för användaren.
+
+**Rate Limiting:**
+`express-rate-limit` på `/api/ice` — max 60 req/min per IP. Överskridens → 429 respons + message.
+
+**CORS:**
+Origo matchas mot `ALLOWED_ORIGINS` (miljövariabel). Mismatch → logger.warn → 403 implicit (ingen Access-Control-Allow-Origin header).
 
 ## Dataintegration: Full stack pipeline
 
