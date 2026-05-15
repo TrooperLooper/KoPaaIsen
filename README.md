@@ -36,7 +36,7 @@ Allt bygger på:
 
 ## Hur det fungerar
 
-**Stack:** React + TypeScript + Tailwind + Rive (state animation) | Express + TypeScript | Turso (SQLite cloud lösning)
+**Stack:** React + TypeScript + Tailwind + Rive | Express + TypeScript + Winston + Zod | Turso (SQLite cloud)
 
 **Pipeline:** SMHI-data → Turso → Backend API (`GET /api/ice?year=:year&month=:month`) → React + Rive animation
 
@@ -180,6 +180,7 @@ Kort, logisk förklaring:
 6. Zod runtime-validering — API-svar och databasrader valideras vid körtid (klart)
 7. Pure functions & enhetstester — fysiklogiken isolerad och testad med Jest (klart)
 8. Kodkvalitet — centraliserade konstanter, extraherad canvas-logik, ingen duplicering (klart)
+9. Säkerhetshärdning — CORS origin-whitelist, rate limiting, strukturerad Winston-loggning (klart)
 
 ---
 
