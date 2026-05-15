@@ -2,37 +2,48 @@
 
 ## Backend-logik: Kalkylen som motor
 
-På backendnivå (Express + TypeScript) gör vi följande **varje gång användaren frågar**:
+Backend-lagret är uppdelat i två separata ansvarsområden:
 
-1. **Hämta väderdata från SQLite** — alla dagar från 1 oktober (året innan) till slutet av vald månad
-2. **Iterera genom temperaturer** och bygga upp FDD-summan dag för dag:
+### 1. Datahämtning och validering (`services/iceCalculator.ts`)
 
-   ```typescript
-   for (const row of allTemps) {
-     const temp = row.temp_c;
-     if (temp < 0) {
-       fddSum += Math.abs(temp);
-       freezeDays++;
-     } else if (temp > 0) {
-       fddSum = Math.max(0, fddSum - temp); // Aldrig negativ
-       thawDays++;
-     }
+Hämtar väderdata från Turso, validerar varje databasrad med Zod, och skickar vidare till fysikfunktionen:
 
-     // Stefan-formeln, uppdaterad varje dag för att hitta max
-     const iceCm = STEFAN_CONSTANT * Math.sqrt(fddSum);
-     if (iceCm > maxIceCm) {
-       maxIceCm = iceCm;
-       fddAtPeak = fddSum;
-     }
-   }
-   ```
+```typescript
+const result = await db.execute({ sql: `SELECT date, temp_c FROM weather_daily WHERE ...`, args: [...] });
+const rows = WeatherRowsSchema.parse(result.rows); // kastar ZodError om data är felformad
+return calculateIceFromTemperatures(rows, monthStart, monthEnd, year, month);
+```
 
-3. **Jämför slutresultatet med Golds formel**:
-   ```typescript
-   const holdsCow = maxIceCm >= COW_THRESHOLD_CM; // 11 cm minimum
-   ```
+### 2. Fysikberäkning (`utils/icePhysics.ts`)
 
-**Logiken här:** Istjockleken är inte monotonisk, den kan minska när det blir varmare. Därför spårar vi den maximala istjockleken och när den uppnåddes (fddAtPeak).
+En **ren funktion** — ingen databas, inget nätverk, bara matematik. Kan testas isolerat med vilken indata som helst:
+
+```typescript
+for (const row of rows) {
+  const temp = row.temp_c;
+  if (temp < 0) {
+    fddSum += Math.abs(temp);
+    freezeDays++;
+  } else if (temp > 0) {
+    fddSum = Math.max(0, fddSum - temp); // Aldrig negativ
+    thawDays++;
+  }
+
+  // Stefan-formeln, uppdaterad varje dag för att hitta max
+  const iceCm = STEFAN_CONSTANT * Math.sqrt(fddSum);
+  if (iceCm > maxIceCm) {
+    maxIceCm = iceCm;
+    fddAtPeak = fddSum;
+  }
+}
+```
+
+**Logiken här:** Istjockleken är inte monotonisk — den kan minska när det töar. Därför spårar vi den maximala istjockleken och när den uppnåddes (`fddAtPeak`). Separationen gör det möjligt att enhetstesta fysiken utan en databaskoppling.
+
+**Jämför med Gold:**
+```typescript
+const holdsCow = maxIceCm >= COW_THRESHOLD_CM; // 11 cm minimum
+```
 
 ## Frontend-rendering: Resultatet blir visuellt
 
@@ -60,13 +71,15 @@ I React-appen:
 ## Dataintegration: Full stack pipeline
 
 ```
-SQLite (39 000+ dagsobservationer)
+Turso (39 000+ dagsobservationer)
     ↓
-Backend API: `/api/ice/:year/:month`
-    ↓ (FDD-kalkyl + Stefan + Gold)
+Backend API: GET /api/ice?year=:year&month=:month
+    ↓ (Zod-validering → FDD-kalkyl → Stefan → Gold)
 JSON-svar: { maxIceCm, holdsCow, freezeDays, thawDays, fddAtPeak }
     ↓
-React hooks (`useIceData`) hämtar och cachas
+Frontend Zod-validering av API-svaret
+    ↓
+React hooks (useIceData) hämtar och cachas
     ↓
 Komponenter renderar animering + modal
     ↓
@@ -75,7 +88,7 @@ Användaren ser: En ko som antingen står på isen eller plumsar
 
 ## Tech Stack
 
-- **Frontend:** React + TypeScript + Tailwind + Rive (animation)
-- **Backend:** Express + TypeScript
+- **Frontend:** React + TypeScript + Tailwind + Rive (animation) + Zod (runtime-validering)
+- **Backend:** Express + TypeScript + Zod (runtime-validering) + Jest (enhetstester)
 - **Database:** Turso (LibSQL cloud database)
-- **Data:** 39,000+ dagsobservationer från SMHI (1917–2026)
+- **Data:** 39 000+ dagsobservationer från SMHI (1917–2026)
