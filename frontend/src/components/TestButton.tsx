@@ -79,7 +79,7 @@ export default function TestButton({
   if (hasResult && animationComplete) {
     buttonStyle = {
       ...buttonStyle,
-      animation: "bgPulse 1.8s ease-in-out infinite",
+      animation: "bgPulse 2.8s cubic-bezier(0.34, 1.56, 0.64, 1) infinite",
     };
   }
 
@@ -94,11 +94,13 @@ export default function TestButton({
         @keyframes bgPulse {
           0%, 100% {
             background-color: #eab308;
+            opacity: 0.9;
             transform: scale(1);
           }
           50% {
-            background-color: #f0b923;
-            transform: scale(1.08);
+            background-color: #fcd34d;
+            opacity: 1;
+            transform: scale(1.12);
           }
         }
       `}</style>
