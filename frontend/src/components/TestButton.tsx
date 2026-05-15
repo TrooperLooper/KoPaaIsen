@@ -7,7 +7,7 @@ interface Props {
   hasResult: boolean;
 }
 
-const ANIMATION_DURATION = 5000; // 5 seconds
+const ANIMATION_DURATION = 3000; // 3 seconds
 
 export default function TestButton({
   onClick,
