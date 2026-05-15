@@ -15,7 +15,7 @@ export function calculateIceFromTemperatures(
   monthStart: Date,
   monthEnd: Date,
   year: number,
-  month: number
+  month: number,
 ): IceResult {
   let fddSum = 0;
   let maxIceCm = 0;

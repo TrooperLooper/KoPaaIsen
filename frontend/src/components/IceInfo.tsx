@@ -39,7 +39,9 @@ export default function IceInfo({
         </p>
         <button
           onClick={onInfoClick}
-          className="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-colors cursor-pointer text-sm sm:text-base"
+          aria-label="Visa beräkning"
+          tabIndex={isVisible ? 0 : -1}
+          className="info-button shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-colors cursor-pointer text-sm sm:text-base"
         >
           i
         </button>

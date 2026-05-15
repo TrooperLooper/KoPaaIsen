@@ -25,7 +25,7 @@ app.use(
         callback(null, false);
       }
     },
-  })
+  }),
 );
 
 app.use(express.json());
@@ -45,7 +45,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.get("/health", async (_req, res) => {
   try {
-    const result = await db.execute("SELECT COUNT(*) as count FROM weather_daily");
+    const result = await db.execute(
+      "SELECT COUNT(*) as count FROM weather_daily",
+    );
     const rowCount = result.rows[0]?.count || 0;
     res.status(200).json({
       status: "ok",

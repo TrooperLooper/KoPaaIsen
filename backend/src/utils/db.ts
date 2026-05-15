@@ -15,7 +15,9 @@ const db = createClient({
 
 (async () => {
   try {
-    const result = await db.execute("SELECT COUNT(*) as count FROM weather_daily");
+    const result = await db.execute(
+      "SELECT COUNT(*) as count FROM weather_daily",
+    );
     const rowCount = result.rows[0]?.count || 0;
     logger.info(`Connected to Turso — weather_daily: ${rowCount} rows`);
   } catch (error) {

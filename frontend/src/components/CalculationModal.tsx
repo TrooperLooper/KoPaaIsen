@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { MONTH_NAMES } from "../constants/months";
 
 interface Props {
@@ -18,6 +18,16 @@ export default function CalculationModal({
   onClose,
   fdd = 0,
 }: Props) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Focus on modal open
+  useEffect(() => {
+    if (isOpen && modalRef.current) {
+      modalRef.current.focus();
+    }
+  }, [isOpen]);
+
+  // Escape key to close
   useEffect(() => {
     if (!isOpen) return;
 
@@ -31,13 +41,50 @@ export default function CalculationModal({
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose]);
 
+  // Focus trap: Tab cycles within modal
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key !== "Tab") return;
+
+    const focusableSelector =
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusableElements = modalRef.current?.querySelectorAll(focusableSelector) || [];
+    const focusableArray = Array.from(focusableElements) as HTMLElement[];
+
+    if (focusableArray.length === 0) return;
+
+    const activeElement = document.activeElement as HTMLElement;
+    const currentIndex = focusableArray.indexOf(activeElement);
+
+    if (e.shiftKey) {
+      // Shift+Tab: go backward
+      if (currentIndex <= 0) {
+        e.preventDefault();
+        focusableArray[focusableArray.length - 1].focus();
+      }
+    } else {
+      // Tab: go forward
+      if (currentIndex >= focusableArray.length - 1) {
+        e.preventDefault();
+        focusableArray[0].focus();
+      }
+    }
+  }, []);
+
   if (!isOpen) return null;
 
   const monthName = MONTH_NAMES[month] || "Februari";
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-amber-50 rounded-lg max-w-2xl w-full p-4 sm:p-8 shadow-xl relative max-h-[90vh] overflow-y-auto">
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        tabIndex={-1}
+        onKeyDown={handleKeyDown}
+        className="bg-amber-50 rounded-lg max-w-2xl w-full p-4 sm:p-8 shadow-xl relative max-h-[90vh] overflow-y-auto"
+      >
         {/* Close button */}
         <button
           onClick={onClose}
@@ -47,7 +94,7 @@ export default function CalculationModal({
           ×
         </button>
 
-        <h2 className="bevan-regular text-3xl text-gray-900 my-4 text-center tracking-tight w-full">
+        <h2 id="modal-title" className="bevan-regular text-3xl text-gray-900 my-4 text-center tracking-tight w-full">
           Hur vet vi om isen kunde bära?
         </h2>
 
@@ -116,13 +163,14 @@ export default function CalculationModal({
               </p>
               <p className="inter-regular text-gray-700 mb-3 text-sm">
                 Vintern fram till {monthName} {year} hade:{" "}
-                <p>
+                <br />
+                <span>
                   {" "}
                   <span className="text-red-700 font-bold">
                     {fdd.toFixed(0)}{" "}
                   </span>
                   netto frostgraddygn{" "}
-                </p>
+                </span>
               </p>
               <div className="bg-white p-4 rounded font-mono text-sm mt-auto text-center">
                 <p className="inter-regular">

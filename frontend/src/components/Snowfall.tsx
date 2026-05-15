@@ -14,6 +14,9 @@ interface Props {
 }
 
 export default function Snowfall({ count = 50, resetTrigger = 0 }: Props) {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return null;
+
   const snowflakes = useMemo((): Snowflake[] => {
     return Array.from({ length: count }, (_, i) => ({
       id: i + resetTrigger,
@@ -24,7 +27,7 @@ export default function Snowfall({ count = 50, resetTrigger = 0 }: Props) {
   }, [count, resetTrigger]);
 
   return (
-    <div className="snowfall">
+    <div className="snowfall" aria-hidden="true">
       {snowflakes.map((flake) => (
         <div
           key={flake.id}

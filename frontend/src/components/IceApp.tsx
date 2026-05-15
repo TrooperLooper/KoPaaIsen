@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useIceData } from "../hooks/useIceData";
 import YearDial from "./YearDial";
 import MonthDial from "./MonthDial";
@@ -8,14 +8,27 @@ import Snowfall from "./Snowfall";
 import IceInfo from "./IceInfo";
 import CalculationModal from "./CalculationModal";
 import { calculateCanvasMetrics } from "../utils/canvasMetrics";
+import { MONTH_NAMES } from "../constants/months";
 
 export default function IceApp() {
   const [year, setYear] = useState(1942);
   const [month, setMonth] = useState(2);
   const [animationKey, setAnimationKey] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [liveText, setLiveText] = useState<string | null>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
   const { result, isLoading, error, fetchData, clearResult } = useIceData();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const openModal = () => {
+    triggerRef.current = document.activeElement as HTMLElement;
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    triggerRef.current?.focus();
+  };
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -23,15 +36,39 @@ export default function IceApp() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    if (!result) {
+      setLiveText(null);
+      return;
+    }
+
+    const monthName = MONTH_NAMES[month] || "Februari";
+    const thickness = result.maxIceCm.toFixed(1);
+    const holdsCow = result.holdsCow;
+
+    const timer = setTimeout(() => {
+      let announcement: string;
+      if (holdsCow) {
+        announcement = `Isen håller! I ${monthName} ${year} var isen ${thickness} cm – tjock nog för en ko. Kon står säkert på isen. Tryck REWIND för att prova ett annat år.`;
+      } else {
+        announcement = `Isen håller inte. I ${monthName} ${year} var isen ${thickness} cm – för tunn för en ko. Kon faller igenom isen. Tryck REWIND för att prova ett annat år.`;
+      }
+      setLiveText(announcement);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [result, month, year]);
+
   const { canvasHeight, controlsOverlap } = calculateCanvasMetrics(windowWidth);
 
   const handleReset = () => {
     clearResult();
+    setLiveText(null);
     setAnimationKey((prev) => prev + 1);
   };
 
   return (
-    <div
+    <main
       style={{
         display: "flex",
         flexDirection: "column",
@@ -68,7 +105,7 @@ export default function IceApp() {
           />
           <Snowfall resetTrigger={animationKey} />
           {error && (
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center" role="alert">
               <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg max-w-xs text-center">
                 <p className="font-semibold mb-2">Något gick fel</p>
                 <p className="text-sm">{error}</p>
@@ -80,7 +117,7 @@ export default function IceApp() {
               year={year}
               month={month}
               thickness={result.maxIceCm}
-              onInfoClick={() => setIsModalOpen(true)}
+              onInfoClick={openModal}
             />
           )}
         </div>
@@ -92,7 +129,7 @@ export default function IceApp() {
             month={month}
             thickness={result.maxIceCm}
             isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+            onClose={closeModal}
             fdd={result.fddAtPeak}
           />
         )}
@@ -105,7 +142,11 @@ export default function IceApp() {
           {/* Dials side by side */}
           <div className="flex justify-center gap-4 sm:gap-8 px-4">
             <div className="flex-1">
-              <YearDial value={year} onChange={setYear} disabled={isLoading || !!result} />
+              <YearDial
+                value={year}
+                onChange={setYear}
+                disabled={isLoading || !!result}
+              />
             </div>
             <div className="flex-1">
               <MonthDial
@@ -148,6 +189,11 @@ export default function IceApp() {
           </a>
         </p>
       </div>
-    </div>
+
+      {/* Screen reader result announcement */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {liveText}
+      </div>
+    </main>
   );
 }

@@ -1,8 +1,8 @@
 const PARENT_MAX_WIDTH = 384; // max-w-96 in Tailwind
-const PARENT_MARGIN = 32;    // 16px each side
-const CANVAS_RATIO = 1.8;    // canvas is wider than its parent container
+const PARENT_MARGIN = 32; // 16px each side
+const CANVAS_RATIO = 1.8; // canvas is wider than its parent container
 const CANVAS_MAX_HEIGHT = 650;
-const VIEWPORT_MARGIN = 16;  // prevent canvas from touching screen edges
+const VIEWPORT_MARGIN = 16; // prevent canvas from touching screen edges
 const CONTROLS_OVERLAP_RATIO = 120 / 650; // controls overlap this fraction of canvas height
 
 export interface CanvasMetrics {

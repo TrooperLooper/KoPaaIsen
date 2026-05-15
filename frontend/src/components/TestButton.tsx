@@ -29,19 +29,23 @@ export default function TestButton({
 
   let bgColor = "#22c55e"; // green - initial
   let text = "TESTA ISEN";
+  let ariaLabel = "Testa isen";
   let isDisabled = false;
 
   if (isLoading) {
     bgColor = "#3b82f6"; // blue - loading
     text = "BERÄKNAR";
+    ariaLabel = "Beräknar, vänta";
     isDisabled = true;
   } else if (hasResult && !animationComplete) {
     bgColor = "#3b82f6"; // blue - animation playing
     text = "BERÄKNAR";
+    ariaLabel = "Beräknar, vänta";
     isDisabled = true;
   } else if (hasResult && animationComplete) {
     bgColor = "#eab308"; // yellow - show rewind
     text = "REWIND";
+    ariaLabel = "Rewind, testa ett annat år";
     isDisabled = false;
   }
 
@@ -72,6 +76,7 @@ export default function TestButton({
     margin: "0 auto",
     display: "block",
     whiteSpace: "nowrap",
+    pointerEvents: isDisabled ? "none" : "auto",
   };
 
 
@@ -104,7 +109,7 @@ export default function TestButton({
           }
         }
       `}</style>
-      <button onClick={handleClick} disabled={isDisabled} style={buttonStyle}>
+      <button onClick={handleClick} aria-disabled={isDisabled} tabIndex={0} aria-label={ariaLabel} style={buttonStyle}>
         {isCalculating
           ? text.split("").map((char, i) => (
               <span

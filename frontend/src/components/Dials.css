@@ -39,3 +39,28 @@ input[type="range"]::-moz-range-track {
   background: transparent;
   border: none;
 }
+
+/* Focus visible for keyboard navigation */
+input[type="range"]:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  background: #dc2626;
+}
+
+input[type="range"]:focus-visible::-moz-range-thumb {
+  background: #dc2626;
+}
+
+button:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+.info-button:focus-visible {
+  background-color: #dc2626;
+  color: white;
+}
