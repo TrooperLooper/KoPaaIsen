@@ -8,11 +8,13 @@
 
 _Jag vill med detta projekt visa fram hur jag tänker, designar, implementerar och förklarar ett komplett datadrivet system från rådata av en databas till en levande interaktiv infografik._
 
-_(I en verklig produktion så hade detta förberäknats och cachats, men jag valde medvetet bygga den på detta sättet för att hålla hela stacken synlig och demonstrerbar.)_
+_(I en verklig produktion så hade datan förberäknats och cachats, men jag valde medvetet bygga den på detta sättet för att hålla hela stacken synlig och demonstrerbar.)_
 
 ---
 
 ## Idé & Syfte
+
+Ko på Isen är en app som låter dig visuellt testa: **Kunde en ko stå på isen i någon av Malmös historiska vintrar?**
 
 Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" och får omedelbar visuell feedback:
 
