@@ -8,7 +8,7 @@
 
 _Jag vill med detta projekt visa fram hur jag tänker, designar, implementerar och förklarar ett komplett datadrivet system från rådata av en databas till en levande interaktiv infografik._
 
-Det betyder också att göra medvetna arkitektoniska val — veta vad produktion skulle kräva i en verklig setting, men välja vägen som bäst demonstrerar hela stacken.
+_(I en verklig produktion så hade detta förberäknats och cachats, men jag valde medvetet bygga den på detta sättet för att hålla hela stacken synlig och demonstrerbar.)_
 
 ---
 
@@ -59,7 +59,7 @@ Backend och frontend är helt åtskilda:
 - **Frontend** vet bara om rendering—ingen fysik-logik
 - De pratar via ett enkelt JSON API
 
-Denna separation gör koden testbar, skalbar och lätt att förstå. Desutom känndes FDD beräakningen mer "backend-logik" än frontend, så det kändes naturligt att lägga den där.
+Denna separation gör koden testbar, skalbar och lätt att förstå. Dessutom kändes FDD-beräkningen mer "backend-logik" än frontend, så det kändes naturligt att lägga den där.
 
 ### 3. **Transparens i komplexitet**
 
