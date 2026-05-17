@@ -8,6 +8,8 @@
 
 _Jag vill med detta projekt visa fram hur jag tänker, designar, implementerar och förklarar ett komplett datadrivet system från rådata av en databas till en levande interaktiv infografik._
 
+Det betyder också att göra medvetna arkitektoniska val — veta vad produktion skulle kräva i en verklig setting, men välja vägen som bäst demonstrerar hela stacken.
+
 ---
 
 ## Idé & Syfte
@@ -73,6 +75,7 @@ Jag jobbar vanligtvis i MongoDB och SQL. 39 000+ databasrader skulle kunna bli p
 - SQLite-indexering på `date` (supersnabb lookup på FDD perioden)
 - Backend cachar inte (varje API-call är oberoende)
 - Frontend cachar det senaste resultatet tills användaren ändrar år/månad
+- Beräkningarna körs on-demand — i produktion hade alla kombinationer förberäknats och cachats, men det dynamiska alternativet valdes för att hålla hela pipeline:n synlig och bevisbar
 
 ### 5. **UX via animation**
 

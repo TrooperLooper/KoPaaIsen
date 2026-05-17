@@ -114,6 +114,10 @@ Komponenter renderar animering + modal
 Användaren ser: En ko som antingen står på isen eller plumsar
 ```
 
+### Arkitektoniskt val — on-demand vs. förberäkning
+
+Beräkningarna körs on-demand per API-anrop snarare än att vara förberäknade. I ett produktionssystem hade man vänt på detta: ett nattjobb hade förberäknat alla år/månad-kombinationer (1 387 st) och cachat dem i databasen eller som statisk JSON — ingen backend i critical path alls. Det on-demand alternativet valdes medvetet här: det bevisar en riktig backend-pipeline och håller hela stacken synlig, på bekostnad av en liten fördröjning per anrop.
+
 ## Tech Stack
 
 - **Frontend:** React + TypeScript + Tailwind + Rive (animation) + Zod (runtime-validering)
