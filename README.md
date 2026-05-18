@@ -2,19 +2,15 @@
 
 ## Ko på isen
 
-**En fullstack-applikation som kombinerar 100 års väderdata, vetenskaplig fysik och interaktiv animering för att svara på en rolig (men vetenskapligt komplex) fråga: Kunde en ko stå på isen i någon av Malmös historiska vintrar?**
+Ko på Isen är en app som låter dig visuellt testa om **en ko kunde stå på isen under Malmös historiska vintrar?**
 
 [🚀 Live Demo](https://ko-paa-isen.vercel.app)
-
-_Jag vill med detta projekt visa fram hur jag tänker, designar, implementerar och förklarar ett komplett datadrivet system från rådata av en databas till en levande interaktiv infografik._
-
-_(I en verklig produktion så hade datan förberäknats och cachats, men jag valde medvetet bygga den på detta sättet för att hålla hela stacken synlig och demonstrerbar.)_
 
 ---
 
 ## Idé & Syfte
 
-Ko på Isen är en app som låter dig visuellt testa: **Kunde en ko stå på isen i någon av Malmös historiska vintrar?**
+**Jag ville skapa en fullstack-applikation som kombinerar 100 års väderdata, vetenskaplig fysik och interaktiv animering för att svara på en rolig (men vetenskapligt komplex) fråga: Kunde en ko stå på isen i någon av Malmös historiska vintrar?**
 
 Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" och får omedelbar visuell feedback:
 
@@ -23,7 +19,6 @@ Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" o
 
 Tekniskt pipeline:
 
-**Stack:** React + TypeScript + Tailwind + Rive | Express + TypeScript + Winston + Zod | Turso (SQLite cloud)
 
 **Pipeline:** SMHI-data (1917–2026) → Turso → Backend API (`GET /api/ice?year=:year&month=:month`) → Zod-validering → React UI + Rive animation
 
@@ -42,6 +37,10 @@ Se [Detaljerad fysik-förklaring](./docs/physics.md) för formler och härlednin
 ---
 
 ## Min tankegång kring arkitekturen
+
+_Jag ville med detta projekt visa fram hur jag tänker, designar, implementerar och förklarar ett komplett datadrivet system från rådata av en databas till en levande interaktiv infografik._
+
+_(I en verklig produktion så hade datan förberäknats och cachats, men jag valde medvetet bygga den på detta sättet för att hålla hela stacken synlig och demonstrerbar.)_
 
 ### 1. **Datadrivet designtänkande**
 
@@ -90,7 +89,7 @@ En siffra "13.8 cm" säger mindre än att _se_ en glad ko på stabil is.
 
 ### 6. **Tillgänglighetsdesign (a11y)**
 
-En Rive-animation är fantastisk visuell kommunikation men säger ingenting för en användare med skärmläsare. Jag ville att upplevelsen ska fungera för alla, inte bara de med syn.
+En Rive-animation är underhållande ovisuell kommunikation men säger ingenting för en användare med skärmläsare. Jag ville att upplevelsen ska fungera för alla, inte bara de med syn.
 
 Appen är WCAG 2.2 AA-kompatibel med fokus på fyra lager:
 
@@ -104,7 +103,12 @@ Appen är WCAG 2.2 AA-kompatibel med fokus på fyra lager:
 
 ## Komponenter & Arkitektur
 
-Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implementering](./docs/implementation.md) för hur varje lager fungerar. Zod-validering, pure funktioner, rate limiting, structured logging, allt den klassiska fullstack-grejen.
+**Tech Stack:**
+- **Frontend:** React + TypeScript + Tailwind + Rive (animation) + Zod (runtime-validering)
+- **Backend:** Express + TypeScript + Winston (loggning) + Zod (runtime-validering) + Jest (tester)
+- **Database:** Turso (LibSQL cloud)
+
+Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implementering](./docs/implementation.md) för hur varje lager fungerar.
 
 ### API
 
@@ -129,13 +133,12 @@ När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-sta
 
 ## Hur jag tänkte som utvecklare
 
-- **Datadrivet:** Allt bygger på verkliga SMHI-data, ingen "hittepå".
+- **Datadrivet:** Allt bygger på 100 års faktisk väderdata från SMHI — ingen gissning.
 - **Fysikaliskt korrekt:** FDD och istillväxt enligt vetenskapliga modeller.
 - **Logiskt:** Tydlig separation av konstanter och variabler, kod och matematik.
 - **Pedagogiskt:** Förklarar både för användare och utvecklare hur allt hänger ihop.
-- **Tillgänglighet:** WCAG 2.2 AA — skärmläsarstöd, tangentbordsnavigering och fokushantering utan att kompromissa med UX. Testad med Axe.
+- **Tillgänglighet:** WCAG 2.2 AA — skärmläsarstöd, matcha aria med timing av animationer tangentbordsnavigering och fokushantering utan att kompromissa med UX. Testad med Axe.
 - **Fullstack:** Från databas till animation.
-- **Claude:** Med agentisk co-coding kunde jag tänka större, gå djupare i min vision.
 
 ---
 
@@ -149,32 +152,17 @@ När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-sta
 
 ## Roadmap
 
-1. Datamerge & import av CSV filer (klart)
-2. Backend-API med FDD-logik (klart)
-3. Frontend med React + Rive (klart)
-4. InfoModal-komponent (klart)
-5. Finputsning, README.md & deploy (klart)
-6. Zod runtime-validering — API-svar och databasrader valideras vid körtid (klart)
-7. Pure functions & enhetstester — fysiklogiken isolerad och testad med Jest (klart)
-8. Kodkvalitet — centraliserade konstanter, extraherad canvas-logik, ingen duplicering (klart)
-9. Säkerhetshärdning — CORS origin-whitelist, rate limiting, strukturerad Winston-loggning (klart)
-10. Tillgänglighet (WCAG 2.2 AA) — `lang`, landmarks, ARIA-etiketter, live regions, fokushantering, reduced-motion, tangentbord (klart)
+1. Data pipeline — 100 år SMHI-data → SQLite (klart)
+2. Backend API med FDD & Stefan-formeln (klart)
+3. Frontend + Rive animation + Accessibility (WCAG 2.2 AA) (klart)
+4. Deploy & dokumentering (klart)
 
 ---
 
 ## Varför gjorde jag detta projekt?
 
-Jag ville visa att jag kan:
-
-✓ **Förstå domän-specifik kunskap** — Kan plugga in fysik i kod utan att det blir "hittepå"  
-✓ **Designa logiskt** — Från data till användarupplevelse, varje steg känns motiverat  
-✓ **Implementera fullstack** — SQLite → Backend API → Frontend UI → Animation, end-to-end  
-✓ **Kommunicera komplexitet** — Visa både "vad" och "varför" för både folk som gillar att se komplex data bli visualiserad med hög nivå av visuell kommunikation & designkvalitet.  
-✓ **Tänka i system** — Inte bara prata om systemer utan göra det förståeligt och underhållbart.
-✓ **Matcha mot verklighet** — Resultaten matchar historiska väderdata och fysikaliska gränser
-
-Det här är mitt sätt att säga: **Jag verkligen uppskattar när fullstack kod, design och kontext går hand i hand.**
+Jag var nyfiken på fysiken bakom is och ville se om jag kunde bygga något som gjorde vetenskapen synlig — inte bara som formler, utan något du kan interagera med. Det här projektet är mitt sätt att visa vad fullstack betyder för mig: från data till användarupplevelse, helt transparent.
 
 ---
 
-**Lars Munck, 2026**
+_Byggt av Lars Munck · Malmö, 2026 · Verktyg: VS Code, Claude Code, Rive_
