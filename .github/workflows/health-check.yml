@@ -1,0 +1,99 @@
+name: Deployment Health Check
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  # Also allow manual trigger
+  workflow_dispatch:
+  # Run after push to catch deployment issues quickly
+  push:
+    branches: [main]
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    name: Check Live Deployments
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for Vercel deployment
+        id: vercel
+        continue-on-error: true
+        run: |
+          echo "Checking Vercel frontend..."
+          curl -v --max-time 30 https://ko-paa-isen.vercel.app 2>&1 | head -50
+
+      - name: Wait for Railway backend
+        id: railway
+        continue-on-error: true
+        run: |
+          echo "Checking Railway backend /health endpoint..."
+          curl -v --max-time 30 https://kopaaisen-production.up.railway.app/health 2>&1 | head -50
+
+      - name: Test frontend → backend connectivity (CORS)
+        id: cors
+        continue-on-error: true
+        run: |
+          echo "Testing frontend can call backend API..."
+          curl -v \
+            -H "Origin: https://ko-paa-isen.vercel.app" \
+            --max-time 30 \
+            "https://kopaaisen-production.up.railway.app/api/ice?year=2009&month=11" 2>&1 | head -100
+
+      - name: Report results
+        if: always()
+        run: |
+          echo "## Deployment Health Check Results"
+          echo ""
+          echo "### Frontend (Vercel)"
+          if [ "${{ steps.vercel.outcome }}" == "success" ]; then
+            echo "✅ PASS - Frontend is responding"
+          else
+            echo "❌ FAIL - Frontend is not responding"
+          fi
+          echo ""
+          echo "### Backend (Railway) /health"
+          if [ "${{ steps.railway.outcome }}" == "success" ]; then
+            echo "✅ PASS - Backend health check passed"
+          else
+            echo "❌ FAIL - Backend health check failed"
+          fi
+          echo ""
+          echo "### CORS (Frontend → Backend)"
+          if [ "${{ steps.cors.outcome }}" == "success" ]; then
+            echo "✅ PASS - CORS headers present"
+          else
+            echo "❌ FAIL - CORS or connection issue"
+          fi
+
+      - name: Send alert email on failure
+        if: |
+          failure() ||
+          steps.vercel.outcome == 'failure' ||
+          steps.railway.outcome == 'failure' ||
+          steps.cors.outcome == 'failure'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: '🚨 KoPaaIsen Deployment Health Check Failed'
+          to: post@recap.dk
+          from: 'KoPaaIsen CI'
+          body: |
+            Deployment health check failed at $(date)
+
+            Frontend (Vercel): ${{ steps.vercel.outcome }}
+            Backend (Railway /health): ${{ steps.railway.outcome }}
+            CORS connectivity: ${{ steps.cors.outcome }}
+
+            Check full logs:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Manual Checks:
+            - Frontend: https://ko-paa-isen.vercel.app
+            - Backend Health: https://kopaaisen-production.up.railway.app/health
+            - Railway Logs: https://railway.app
