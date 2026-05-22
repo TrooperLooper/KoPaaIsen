@@ -68,32 +68,20 @@ jobs:
             echo "❌ FAIL - CORS or connection issue"
           fi
 
-      - name: Send alert email on failure
+      - name: Send alert email on failure (Resend)
         if: |
           failure() ||
           steps.vercel.outcome == 'failure' ||
           steps.railway.outcome == 'failure' ||
           steps.cors.outcome == 'failure'
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.EMAIL_USER }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: '🚨 KoPaaIsen Deployment Health Check Failed'
-          to: post@recap.dk
-          from: 'KoPaaIsen CI'
-          body: |
-            Deployment health check failed at $(date)
-
-            Frontend (Vercel): ${{ steps.vercel.outcome }}
-            Backend (Railway /health): ${{ steps.railway.outcome }}
-            CORS connectivity: ${{ steps.cors.outcome }}
-
-            Check full logs:
-            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-            Manual Checks:
-            - Frontend: https://ko-paa-isen.vercel.app
-            - Backend Health: https://kopaaisen-production.up.railway.app/health
-            - Railway Logs: https://railway.app
+        run: |
+          curl -X POST https://api.resend.com/emails \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer ${{ secrets.RESEND_API_KEY }}" \
+            -d '{
+              "from": "onboarding@resend.dev",
+              "to": "post@recap.dk",
+              "subject": "🚨 KoPaaIsen Deployment Health Check Failed",
+              "html": "<h2>Deployment Health Check Failed</h2><p><strong>Frontend (Vercel):</strong> ${{ steps.vercel.outcome }}</p><p><strong>Backend (Railway /health):</strong> ${{ steps.railway.outcome }}</p><p><strong>CORS connectivity:</strong> ${{ steps.cors.outcome }}</p><p><a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View full logs</a></p>"
+            }'
+        continue-on-error: true
