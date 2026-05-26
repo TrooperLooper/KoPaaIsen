@@ -19,8 +19,16 @@ Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" o
 
 Tekniskt pipeline:
 
-
-**Pipeline:** SMHI-data (1917–2026) → Turso → Backend API (`GET /api/ice?year=:year&month=:month`) → Zod-validering → React UI + Rive animation
+```mermaid
+flowchart TD
+    A[📂 SMHI CSV-filer\n39 381 dagsobservationer\n3 väderstationer 1917–2026] --> B[🗄️ SQLite / Turso\nDeduplicerad & indexerad på datum]
+    B --> C[⚙️ Express API\nGET /api/ice/:year/:month]
+    C --> D[🧮 FDD-ackumulering\nSumma frysgrader från oktober\nminus tögrader]
+    D --> E[❄️ Stefans formel\nH = 2.5 × √FDD]
+    E --> F[🐄 Golds regel\nH ≥ 11 cm för 400 kg ko?]
+    F -->|Ja| G[✅ Kon står\nRive: stand state]
+    F -->|Nej| H[❌ Kon plumsar\nRive: plunge state]
+```
 
 **Logik bakom:** FDD-ackumulering från oktober, Stefan-formeln för istjocklek, Gold's regel för bärighet (11 cm minimum för 400 kg ko).
 
