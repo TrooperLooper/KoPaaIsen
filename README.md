@@ -17,7 +17,7 @@ Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" o
 - **Om isen är tillräckligt tjock:** Kon står stabilt på isen (och den animerade kossan är nöjd)
 - **Om isen är för tunn:** Kon åker genom isen (med överraskad min och fladdrande öron)
 
-Tekniskt pipeline:
+Teknisk pipeline:
 
 ```mermaid
 flowchart TD
