@@ -2,7 +2,9 @@
 
 ## Historisk kontext
 
-Vintern 1941–1942 var **den kallaste vintern under 1900-talet** i Sverige och också den kallaste på 500 år. Malmö uppmätte sitt rekord för lägsta temperatur under denna period: **-23.4°C** (enligt SMHI). En ovanligt hård vinter som inte upprepats sedan dess.
+Vintern 1941–1942 var **den kallaste av de tre krigsvintrarna** och säkerligen en av de kallaste på 500 år. Under perioden januari 25-30, 1942 drabbades södra Sverige av extrem kyla: 20-30°C under noll, lokalt ner till -35°C. Malmö nådde sitt rekord: **-28.0°C** (enligt SMHI blogg).
+
+Denna kyla varade inte bara några dagar — februari och mars 1942 förblev brutalt kalla. Det är denna **långvariga kallperiod** som förklarar varför istjockleken blev så extrem.
 
 ![Krigsvintern 1942](../frontend/public/krigsvintern.png)
 
@@ -14,6 +16,10 @@ Vi tittar på vad som hände från oktober 1941 till februari 1942 under denna e
 - 64 dagar med temperatur < 0°C (kalla vinterdagar)
 - 3 dagar med temperatur > 0°C (korta upptiningar)
 - Resten omkring 0°C (övergångsdagar)
+
+## Varför FDD blev så stor
+
+Det kritiska var inte bara att januari var fruktansvärt kall, utan att **februari och mars också förblev extremt kalla**. Månadsmedeltemperaturen låg långt under -10°C — ovanligt även för svenska mått. Denna långvariga kyla under hela höst-vinter-perioden från oktober 1941 är vad som skapade rekordhöga FDD-värden.
 
 ## Steg-för-steg-beräkning
 
@@ -43,7 +49,7 @@ Resultat: 44.8 > 11 → KON KLARAR SIG ✓
 
 ## Varför detta exempel är intressant
 
-Februari 1942 var **inte** en extremt kall månad för sig själv. Men den kom _efter_ en hel kallperiod från oktober. Det visar varför vi räknar Net FDD från oktober—det är den **kumulativa effekten** som skapar tjock is, inte en enstaka kalldag.
+Februari 1942 var **inte** en extremt kall månad för sig själv. Men den kom _efter_ en hel kallperiod från oktober. Det visar varför vi räknar Net FDD från oktober—det är den **kumulativa effekten** som skapar tjock is, inte en enstaka kalldag. Denna månads rekordistjocklek är också anledningen till att den valdes som default-scenario i appen.
 
 ## Validering mot verklighet
 
