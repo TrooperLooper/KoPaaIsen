@@ -2,7 +2,7 @@
 
 ## Ko på isen
 
-Ko på Isen är en webbapp som låter dig visuellt testa vilka år/månader **en ko kunde stå på isen under Malmös historiska vintrar**
+Ko på Isen är en webbapp som låter dig visuellt testa om **en ko kunde stå på isen under Malmös historiska vintrar**
 
 [🚀 Live Demo](https://ko-paa-isen.vercel.app)
 
