@@ -38,7 +38,7 @@ Se [Detaljerad implementering](./docs/implementation.md) för full arkitektur oc
 
 ## Fysiken kort förklarat
 
-Istjocklek beror på **kumulativ kyla** (FDD) — alltså en längre frysperiod, inte enstaka kallnätter. Stefan-formeln från 1800-talet beskriver tillväxten matematiskt. Gold's regel säger att 11 cm tjock is räcker för en 400 kg ko på Malmös saltvatten (A = 3.5 kg/cm²).
+Istjocklek beror på **kumulativ kyla** (FDD), så alltså isbildning under en längre frysperiod och inte enstaka kallnätter. Stefan-formeln från 1800-talet beskriver tillväxten matematiskt. Gold's regel säger sedan att 11 cm tjock is räcker för en 400 kg ko på Malmös saltvatten (A = 3.5 kg/cm²).
 
 Se [Detaljerad fysik-förklaring](./docs/physics.md) för formler och härledning.
 
@@ -84,22 +84,22 @@ Jag jobbar vanligtvis i MongoDB och SQL. 39 000+ databasrader skulle kunna bli p
 - SQLite-indexering på `date` (supersnabb lookup på FDD perioden)
 - Backend cachar inte (varje API-call är oberoende)
 - Frontend cachar det senaste resultatet tills användaren ändrar år/månad
-- Beräkningarna körs on-demand — i produktion hade alla kombinationer förberäknats och cachats, men det dynamiska alternativet valdes för att hålla hela pipeline:n synlig och bevisbar
+- Beräkningarna körs on-demand — Detta dynamiska alternativet valdes för att hålla hela pipeline:n synlig och bevisbar
 
 ### 5. **UX via animation**
 
-Jag gjorde Rive-animationen humoristisk, med en välkänd motion graphics-stil vilket gör den väldigt lätt att avläsa och **kommunicerar effektivt** komplex information:
+Jag gjorde Rive-animationen humoristisk, med en välkänd motion graphics stil vilket gör den lätt att avläsa och **kommunicerar effektivt** komplex information via empati:
 
-- Kon står = "isen höll" (positivt, visuellt)
-- Kon sjunker = "isen bröt" (negativt, omedelbar förståelse)
+- Kon står = "isen höll" (positivt, va bra att kossan klarade sig!)
+- Kon sjunker = "isen bröt" (negativt, åh nej den gick genom!)
 
-En siffra "13.8 cm" säger mindre än att _se_ en glad ko på stabil is.
+En siffra "13.8 cm" säger mindre än att _se_ en glad ko med viftande öron på stabil is.
 
 ### 6. **Tillgänglighetsdesign (a11y)**
 
-En Rive-animation är underhållande ovisuell kommunikation men säger ingenting för en användare med skärmläsare. Jag ville att upplevelsen ska fungera för alla, inte bara de med syn.
+En Rive-animation är underhållande för andvändare med syn men säger ingenting för en användare med skärmläsare. Jag ville att upplevelsen ska fungera för alla, inte bara de med syn.
 
-Appen är WCAG 2.2 AA-kompatibel med fokus på fyra lager:
+Appen är WCAG 2.2 AA-kompatibel med fokus på fem lager:
 
 - **Semantik:** `lang="sv"`, `<main>`-landmark, korrekt `role="dialog"` på modalen
 - **Etiketter:** `aria-label` och `aria-valuetext` på alla interaktiva element (sliders, knappar)
@@ -129,10 +129,10 @@ Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implem
 ## Vad jag lärde mig och vad som var tufft
 
 **Rive State Machine & Data Binding**
-Rive-integreringen var knepig att få att fungera med dom nya data-binding uppdateringarna, men jag insåg att färre states är enklare i state machine. Istället för att försöka modellera flera states fick jag göra mig av med komplexiteten och använda en enda boolean. Det blev både enklare och bättre.
+Jag hade planerat material till 6 states men Rive-integreringen var knepig att få att fungera med dom nya data-binding uppdateringarna. Jag insåg att färre animerade states i state machine gör det lättare att lära sig. Istället för att försöka modellera flera states fick jag göra mig av med komplexiteten och använda en enda boolean. Det blev både enklare och va det enda som behövdes för appen skulle uppfylla sitt syfte.
 
 **FDD-logik & Backend-design**
-Jag ville först beräkna FDD i frontend (hur många frysdagar), men när jag tänkte på hur väder inte bara fryser men också töar på vintern valde jag att göra beräkningarna utifrån "Stefan-formeln" och insåg jag att det hörde hemma i backend där jag redan hade all historisk data. Det blev både renare och mer korrekt.
+Jag ville ursprungligen nöja mig med att beräkna FDD i frontend (hur många frysdagar upp till vald månad), men när jag tänkte på hur väder inte bara fryser men också töar på vintern valde jag att göra beräkningarna utifrån "Stefan-formeln" och insåg att det hörde hemma i backend där jag redan hade all historisk data. Det blev både renare och mer korrekt.
 
 **Datahantering — SQLite över Excel**
 När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-stationer krashade Excel. SQLite blev räddningen och en bra påminnelse om att välja verktyg efter problem, inte vana. Som MERN-utvecklare var det också värdefullt att träna mer på SQL igen.
@@ -141,11 +141,11 @@ När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-sta
 
 ## Hur jag tänkte som utvecklare
 
-- **Datadrivet:** Allt bygger på 100 års faktisk väderdata från SMHI — ingen gissning.
+- **Datadrivet:** Allt bygger på 100 års verifierade väderdata från SMHI.
 - **Fysikaliskt korrekt:** FDD och istillväxt enligt vetenskapliga modeller.
 - **Logiskt:** Tydlig separation av konstanter och variabler, kod och matematik.
 - **Pedagogiskt:** Förklarar både för användare och utvecklare hur allt hänger ihop.
-- **Tillgänglighet:** WCAG 2.2 AA — skärmläsarstöd, matcha aria med timing av animationer tangentbordsnavigering och fokushantering utan att kompromissa med UX. Testad med Axe.
+- **Tillgänglighet:** WCAG 2.2 AA — skärmläsarstöd, prefers-reduced-motion, matcha aria med timing av animationer tangentbordsnavigering och fokushantering utan att kompromissa med UX. Testad med Axe.
 - **Fullstack:** Från databas till animation.
 
 ---
@@ -167,9 +167,9 @@ När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-sta
 
 ---
 
-## Varför gjorde jag detta projekt?
+## Varför skapade jag detta projekt?
 
-Jag var nyfiken på fysiken bakom is och ville se om jag kunde bygga något som gjorde vetenskapen synlig — inte bara som formler, utan något du kan interagera med. Det här projektet är mitt sätt att visa vad fullstack betyder för mig: från data till användarupplevelse, helt transparent.
+Jag var nyfiken på fysiken bakom is och ville se om jag kunde bygga något som gjorde vetenskapen synlig, inte bara som formler, utan något du kan interagera med. Det här projektet är mitt sätt att visa vad fullstack betyder för mig: från data till användarupplevelse, helt transparent.
 
 ---
 
