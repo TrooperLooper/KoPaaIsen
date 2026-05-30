@@ -10,13 +10,13 @@ Hämtar väderdata från Turso, validerar varje databasrad med Zod, och skickar 
 
 ```typescript
 const result = await db.execute({ sql: `SELECT date, temp_c FROM weather_daily WHERE ...`, args: [...] });
-const rows = WeatherRowsSchema.parse(result.rows); // kastar ZodError om data är felformad
+const rows = WeatherRowsSchema.parse(result.rows); // ger ett ZodError meddelande tillbaks om datan är felformad
 return calculateIceFromTemperatures(rows, monthStart, monthEnd, year, month);
 ```
 
 ### 2. Fysikberäkning (`utils/icePhysics.ts`)
 
-En **ren funktion** — ingen databas, inget nätverk, bara matematik. Kan testas isolerat med vilken indata som helst:
+En **ren funktion** — Baserad på matte, ingen databas eller nätverk. Kan testas isolerat med vilken inkommande data som helst:
 
 ```typescript
 for (const row of rows) {
@@ -29,7 +29,7 @@ for (const row of rows) {
     thawDays++;
   }
 
-  // Stefan-formeln, uppdaterad varje dag för att hitta max
+  // Stefan-formeln, uppdateras för varje dag upptill vald månad för att hitta den maximala tjockleken.
   const iceCm = STEFAN_CONSTANT * Math.sqrt(fddSum);
   if (iceCm > maxIceCm) {
     maxIceCm = iceCm;
@@ -38,7 +38,7 @@ for (const row of rows) {
 }
 ```
 
-**Logiken här:** Istjockleken är inte monotonisk — den kan minska när det töar. Därför spårar vi den maximala istjockleken och när den uppnåddes (`fddAtPeak`). Separationen gör det möjligt att enhetstesta fysiken utan en databaskoppling.
+**Logiken här:** Istjockleken är inte monotonisk — den kan också minska när det töar. Därför spårar vi den maximala istjockleken för vald månad och när den uppnåddes (`fddAtPeak`). Separationen gör det möjligt att enhetstesta fysiken utan en databaskoppling.
 
 **Jämför med Gold:**
 
@@ -48,7 +48,7 @@ const holdsCow = maxIceCm >= COW_THRESHOLD_CM; // 11 cm minimum
 
 ## Frontend-rendering: Resultatet blir visuellt
 
-Delade konstanter och hjälpfunktioner lever i egna moduler:
+Delade konstanter och hjälpfunktioner bor i egna moduler:
 
 - `constants/months.ts` — `MONTH_NAMES` och `MONTHS` (Oct–Maj), importeras av alla komponenter som behöver månadsnamn
 - `utils/canvasMetrics.ts` — beräknar canvas-dimensioner utifrån fönsterbredd; `IceApp` anropar `calculateCanvasMetrics(windowWidth)` istället för att ha inline-matte
@@ -61,7 +61,7 @@ Systemet skickar tillbaka:
 
 I React-appen:
 
-1. **CowAnimation** byter tillstånd baserat på `holdsCow`
+1. **CowAnimation** byter state baserat på `holdsCow`
    - `holdsCow === true` → kons modell står stabilt på isen (Rive-animation "stand")
    - `holdsCow === false` → kons modell sjunker genom isen (Rive-animation "plunge")
 
@@ -70,16 +70,16 @@ I React-appen:
    - Klickbar info-knapp som öppnar **CalculationModal**
 
 3. **CalculationModal** — transparensen bakom kulisserna
-   - Visar Golds formel: "Varför behövs 11 cm?"
-   - Visar Stefans formel: "Hur tjock blev isen verkligen?"
+   - Visar Golds formel: "Hur vet vi der behövs 11 cm is för att bära en kossa?"
+   - Visar Stefans formel: "Hur vet vi hur tjock isen blev?"
    - Kombinerar matematiken för att förklara resultatet
    - Exempel: "Från oktober 1941 till februari 1942 var det 64 frysdagar (-327 grader totalt). Stefan-formeln ger 48.2 cm. Gold's regel kräver 11 cm. Resultat: Kon klarar sig! ✓"
 
-Det är inte bara en siffra — det är en förklaring en användare kan förstå och verifiera själv.
+Det bevisar en verklig förklaring bakom resultatet som användaren kan verifiera själv.
 
 ## Error Handling & Validering
 
-Fel kan hända på flera ställen. Vi fångar dem utan att krascha:
+Fel kan hända på flera ställen och säkrar att dom kan fångas utan att krascha:
 
 **Database → Backend:**
 Zod validerar varje rad från Turso. Om en rad saknar `temp_c`, kastar Zod `ZodError` → routens `catch` fångar det → logg via Winston → 500-respons med detalj.
@@ -116,7 +116,7 @@ Användaren ser: En ko som antingen står på isen eller plumsar
 
 ### Arkitektoniskt val — on-demand vs. förberäkning
 
-Beräkningarna körs on-demand per API-anrop snarare än att vara förberäknade. I ett produktionssystem hade man vänt på detta: ett nattjobb hade förberäknat alla år/månad-kombinationer (1 387 st) och cachat dem i databasen eller som statisk JSON — ingen backend i critical path alls. Det on-demand alternativet valdes medvetet här: det bevisar en riktig backend-pipeline och håller hela stacken synlig, på bekostnad av en liten fördröjning per anrop.
+Beräkningarna körs on-demand per API-anrop snarare än att vara förberäknade. I ett produktionssystem hade man logiskt sett kanske vänt på detta genom att ha förberäknat alla år/månad-kombinationer (1 387 st) och cachat dem i databasen eller som statisk JSON — ingen backend i critical path alls. Men det här on-demand alternativet valdes medvetet för läringens skull och för att bevisa en riktig backend-pipeline och håller hela stacken synlig, på bekostnad av en pytteliten fördröjning per anrop.
 
 ## Tech Stack
 
