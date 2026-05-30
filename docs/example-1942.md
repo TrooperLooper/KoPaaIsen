@@ -2,7 +2,7 @@
 
 ## Historisk kontext
 
-Vintern 1941–1942 var en av de kallaste under 1900-talet i Sverige. Faktiskt var vintern **1942/43 den kallaste på 500 år**. Malmö uppmätte sitt rekord för lägsta temperatur under denna period: **-28°C.** En ovanligt hård vinter som inte upprepats sedan.
+Vintern 1941–1942 var **den kallaste vintern under 1900-talet** i Sverige och också den kallaste på 500 år. Malmö uppmätte sitt rekord för lägsta temperatur under denna period: **-23.4°C** (enligt SMHI). En ovanligt hård vinter som inte upprepats sedan dess.
 
 ![Krigsvintern 1942](../frontend/public/krigsvintern.png)
 
