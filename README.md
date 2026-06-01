@@ -117,6 +117,7 @@ Appen är WCAG 2.2 AA-kompatibel med fokus på fem lager:
 - **Backend:** Express + TypeScript + Winston (loggning) + Zod (runtime-validering) + Jest (tester)
 - **Databas:** Turso (LibSQL cloud)
 - **Tester:** 34 enhetstester (service-layer, API-routes, physics-formulas)
+- **CI/CD:** GitHub Actions (test + deployment health check)
 
 Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implementering](./docs/implementation.md) för hur varje lager fungerar.
 

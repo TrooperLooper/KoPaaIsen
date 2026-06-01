@@ -124,4 +124,5 @@ Beräkningarna körs on-demand per API-anrop snarare än att vara förberäknade
 - **Backend:** Express + TypeScript + Zod (runtime-validering) + Winston (logging) + Jest (enhetstester)
 - **Säkerhet:** CORS origin-whitelist, express-rate-limit (60 req/min per IP)
 - **Database:** Turso (LibSQL cloud database)
+- **CI/CD:** GitHub Actions (test suite on push, scheduled deployment health check)
 - **Data:** 39 000+ dagsobservationer från SMHI (1917–2026)
