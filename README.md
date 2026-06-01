@@ -112,9 +112,11 @@ Appen är WCAG 2.2 AA-kompatibel med fokus på fem lager:
 ## Komponenter & Arkitektur
 
 **Tech Stack:**
+
 - **Frontend:** React + TypeScript + Tailwind + Rive (animation) + Zod (runtime-validering)
 - **Backend:** Express + TypeScript + Winston (loggning) + Zod (runtime-validering) + Jest (tester)
-- **Database:** Turso (LibSQL cloud)
+- **Databas:** Turso (LibSQL cloud)
+- **Tester:** 34 enhetstester (service-layer, API-routes, physics-formulas)
 
 Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implementering](./docs/implementation.md) för hur varje lager fungerar.
 
