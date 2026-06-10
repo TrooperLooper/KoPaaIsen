@@ -10,9 +10,9 @@ Men temperaturerna berättar inte hela historien. Öresund frös till medan **Da
 
 **Minnet av 1928:** Dom som hade upplevt vintern 1928/29 kunde berätta att Öresund hade frusit helt till redan före jul. Hela familjer vandrade från Rungsted i Danmark till Hven i Sverige, men stoppades av svenska tullare. Karen Nordstrøm, som upplevde den vintern som barn, berättade:
 
-> _Karen Nordstrøm, der oplevede denne vinter som barn, har fortalt, at folk begyndte at gå til Sverige fra stranden i Rungsted. Sammen med sine forældre tog Karen også turen over isen, og efter en lang vandring nåede de endelig Hven. Men da de gjorde sig klar til at hvile lidt ud på stranden, blev de stoppet af svenske toldere. De var nidkære nok til at sende familien hele vejen tilbage til Rungsted, fordi de ikke havde taget pas med._
+> _Folk begyndte at gå til Sverige fra stranden i Rungsted. Sammen med mine forældre tog jeg også turen over isen, og efter en lang vandring nåede vi endelig Hven. Men da vi gjorde os klar til at hvile lidt ud på stranden, blev vi stoppet af svenske toldere. De var nidkære nok til at sende familien hele vejen tilbage til Rungsted, fordi vi ikke havde taget pas med._
 
-Och i ´42 ryktades det igen om att man kunde ta sig över Storebält. Men att göra samma antagelse om Öresund var farligare av skäl som jag kommer inn på senare.
+Och i ´42 ryktades det nu om att man kunde ta sig över Storebält. Men att göra samma antagelse om Öresund var farligare av skäl som jag kommer inn på senare.
 
 Vi tittar först på vad som hände med temperaturerna från oktober 1941 till februari 1942 under denna extrema vinterperiod.
 
