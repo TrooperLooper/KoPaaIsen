@@ -10,7 +10,7 @@ Ko på Isen är en webbapp som låter dig testa huruvida **en ko hade kunnat st�
 
 ## Idé & Syfte
 
-**Jag ville skapa en fullstack-applikation som kombinerar 100 års väderdata, vetenskaplig fysik och interaktiv animering för att svara på en rolig (men vetenskapligt komplex) fråga: Kunde en ko stå på isen i någon av Malmös historiska vintrar?**
+**Jag ville skapa en fullstack-applikation som kombinerar 100 års väderdata, vetenskaplig fysik och interaktiv animering för att svara på en rolig (men vetenskapligt komplex) fråga: Kunde en ko stå på isen i någon utav Malmös historiska vintrar?**
 
 Användaren väljer år och månad (vinterhalvåret), trycker på "Testa isen" och får omedelbar visuell feedback:
 
@@ -148,7 +148,7 @@ När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-sta
 - **Fysikaliskt korrekt:** FDD och istillväxt enligt vetenskapliga modeller.
 - **Logiskt:** Tydlig separation av konstanter och variabler, kod och matematik.
 - **Pedagogiskt:** Förklarar både för användare och utvecklare hur allt hänger ihop.
-- **Tillgänglighet:** WCAG 2.2 AA — skärmläsarstöd, prefers-reduced-motion, matcha aria med timing av animationer tangentbordsnavigering och fokushantering utan att kompromissa med UX. Testad med Axe.
+- **Tillgänglighet:** WCAG 2.2 AA — skärmläsarstöd, prefers-reduced-motion, matchar aria med timing av animationerna, tangentbordsnavigering och fokushantering. Testad med Axe.
 - **Fullstack:** Från databas till animation.
 
 ---
@@ -172,8 +172,8 @@ När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-sta
 
 ## Varför skapade jag detta projekt?
 
-Jag var nyfiken på fysiken bakom is och ville se om jag kunde bygga något som gjorde vetenskapen synlig, inte bara som formler, utan något du kan interagera med. Det här projektet är mitt sätt att visa vad fullstack betyder för mig: från data till användarupplevelse, helt transparent.
+Jag var nyfiken på fysiken bakom is och ville se om jag kunde bygga något som gjorde vetenskapen synlig, inte bara som formler, utan något du kan interagera med. Det här projektet är mitt försök på att visa vad jag tycker är intressant med att skapa en fullstack applikation från data till användarupplevelse.
 
 ---
 
-_Byggt av Lars Munck · Malmö, 2026 · Verktyg: VS Code, Claude Code, Rive_
+_Byggd av Lars Munck · Malmö, 2026 · Verktyg: VS Code, Claude Code, Rive_
