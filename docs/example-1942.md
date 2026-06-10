@@ -4,7 +4,7 @@
 
 Vintern 1941–1942 var **den kallaste av de tre krigsvintrarna** och säkerligen en av de kallaste på 500 år. Under perioden januari 25-30, 1942 drabbades södra Sverige av extrem kyla: 20-30°C under noll, lokalt ner till -35°C. Malmö nådde sitt rekord: **-28.0°C** (enligt SMHI blogg).
 
-![Krigsvintern 1942](../frontend/public/krigsvintern.png)
+![Krigsvintern 1942](https://raw.githubusercontent.com/TrooperLooper/KoPaaIsen/main/frontend/public/krigsvintern.png)
 
 Men temperaturerna berättar inte hela historien. Öresund frös till medan **Danmark var under nazistisk ockupation** och Sverige förblev neutralt. I Malmö var fiskehoddarna tomma och många familjer försökte överleva på bara kål och skarpsill. Livsmedelsbristen ledde till att ett par tusen husmödrar den 10 september 1942 samlades på Möllevångstorget i ett kollektivt uppror, som sen döptes **"Sillaupproret"**. På den danska sidan ökade motståndsrörelsens sabotager av den tyska krigsmaskinen och därmed intensifierades Gestapos jakt på dom. På båda sidor av sundet blickade man mot isen med osäkra förhoppningar om framtiden.
 
@@ -67,7 +67,7 @@ Men publikationen från "Statens Isbrydnings- og Ismeldingstjeneste" avslöjar d
 
 Natten den 5–6 mars 1942 försökte **tre danska motståndskämpare** ta sig över isen till Sverige. Två omkom i försöket. En överlevde.
 
-![Motståndsman på isen, 1942](../frontend/public/modstandsmand_1942.jpg)
+![Motståndsman på isen, 1942](https://raw.githubusercontent.com/TrooperLooper/KoPaaIsen/main/frontend/public/modstandsmand_1942.jpg)
 _Fotografi taget från ett svenskt flygplan, av den enda överlevaren, och var här för utmattad för att nå räddningspaket som kastades ner._
 
 Andra grupper som hade mer tur flydde i sin tur till Sverige genom att gemensamt knuffa roddbåtar framför sig över isen, redo att hoppa ner i båten när isen brast.
