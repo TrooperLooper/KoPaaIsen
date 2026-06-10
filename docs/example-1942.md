@@ -1,4 +1,4 @@
-# Exempelberäkning: Malmö hamn Februari 1942
+# Exempelberäkning: Öresund Februari 1942
 
 ## Historisk kontext
 
