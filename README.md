@@ -148,7 +148,7 @@ När jag försökte lägga ihop 39 000+ temperaturrader från tre olika SMHI-sta
 - **Fysikaliskt korrekt:** FDD och istillväxt enligt vetenskapliga modeller.
 - **Logiskt:** Tydlig separation av konstanter och variabler, kod och matematik.
 - **Pedagogiskt:** Förklarar både för användare och utvecklare hur allt hänger ihop.
-- **Tillgänglighet:** WCAG 2.2 AA — skärmläsarstöd, prefers-reduced-motion, matchar aria med timing av animationerna, tangentbordsnavigering och fokushantering. Testad med Axe.
+- **Tillgänglighet:** WCAG 2.2 AA — skärmläsarstöd, prefers-reduced-motion, matchar aria med timing av animationerna, tangentbordsnavigering och fokushantering. Alla funktioner är fullt navigerbara med tangentbord, ingen mus behövs. Testad med Axe och manuellt.
 - **Fullstack:** Från databas till animation.
 
 ---

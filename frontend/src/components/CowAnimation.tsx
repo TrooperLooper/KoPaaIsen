@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { useRive, useViewModel, useViewModelInstance, useViewModelInstanceBoolean } from "@rive-app/react-canvas";
+import {
+  useRive,
+  useViewModel,
+  useViewModelInstance,
+  useViewModelInstanceBoolean,
+} from "@rive-app/react-canvas";
 
 interface Props {
   holdsCow: boolean | null;
@@ -18,11 +23,11 @@ export default function CowAnimation({ holdsCow, isLoading }: Props) {
 
   const { setValue: setHoldsCow } = useViewModelInstanceBoolean(
     "holdsCow",
-    viewModelInstance
+    viewModelInstance,
   );
   const { setValue: setHasResult } = useViewModelInstanceBoolean(
     "hasResult",
-    viewModelInstance
+    viewModelInstance,
   );
 
   useEffect(() => {
@@ -35,8 +40,20 @@ export default function CowAnimation({ holdsCow, isLoading }: Props) {
   }, [holdsCow, isLoading, viewModelInstance, setHoldsCow, setHasResult]);
 
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex" }} aria-hidden="true">
-      <RiveComponent />
-    </div>
+    <>
+      <div
+        style={{ width: "100%", height: "100%", display: "flex" }}
+        aria-hidden="true"
+      >
+        <RiveComponent />
+      </div>
+      <span className="sr-only">
+        {holdsCow === null
+          ? "Animationen laddas..."
+          : holdsCow
+            ? "Hurra! Kon står stadigt på isen med viftande öron och nöjd min."
+            : "Åh nej! Kon sjunker genom isen med överraskad min, fladdrande öron och svans."}
+      </span>
+    </>
   );
 }
