@@ -27,23 +27,27 @@ export default function TestButton({
     }
   }, [hasResult, isLoading]);
 
-  let bgColor = "#22c55e"; // green - initial
+  let bgColor = "#10652F"; // green - initial
+  let textColor = "white";
   let text = "TESTA ISEN";
   let ariaLabel = "Testa isen";
   let isDisabled = false;
 
   if (isLoading) {
-    bgColor = "#3b82f6"; // blue - loading
+    bgColor = "#044FC8"; // blue - loading
+    textColor = "white";
     text = "BERÄKNAR";
     ariaLabel = "Beräknar, vänta";
     isDisabled = true;
   } else if (hasResult && !animationComplete) {
-    bgColor = "#3b82f6"; // blue - animation playing
+    bgColor = "#044FC8"; // blue - animation playing
+    textColor = "white";
     text = "BERÄKNAR";
     ariaLabel = "Beräknar, vänta";
     isDisabled = true;
   } else if (hasResult && animationComplete) {
     bgColor = "#eab308"; // yellow - show rewind
+    textColor = "#000000"; // black text for WCAG AA contrast (4.5:1 ratio)
     text = "REWIND";
     ariaLabel = "Rewind, testa ett annat år";
     isDisabled = false;
@@ -64,7 +68,7 @@ export default function TestButton({
     width: "145px",
     padding: "0.5rem 1rem",
     borderRadius: "2rem",
-    color: "white",
+    color: textColor,
     fontSize: "1rem",
     fontWeight: "bold",
     letterSpacing: "0.05em",
@@ -78,7 +82,6 @@ export default function TestButton({
     whiteSpace: "nowrap",
     pointerEvents: isDisabled ? "none" : "auto",
   };
-
 
   // Apply REWIND state styles
   if (hasResult && animationComplete) {
@@ -109,7 +112,13 @@ export default function TestButton({
           }
         }
       `}</style>
-      <button onClick={handleClick} aria-disabled={isDisabled} tabIndex={0} aria-label={ariaLabel} style={buttonStyle}>
+      <button
+        onClick={handleClick}
+        aria-disabled={isDisabled}
+        tabIndex={0}
+        aria-label={ariaLabel}
+        style={buttonStyle}
+      >
         {isCalculating
           ? text.split("").map((char, i) => (
               <span

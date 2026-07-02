@@ -78,6 +78,10 @@ export default function IceApp() {
         overflowX: "hidden",
       }}
     >
+      {/* Screen reader only: semantic page title and subtitle */}
+      <h1 className="sr-only">KO PÅ ISEN?</h1>
+      <p className="sr-only">Undersök hur stark isen va i Malmö genom åren. Ställ inn vilket år och månad du vill testa och tryck på knappen för att se resultatet.</p>
+
       <div
         style={{
           width: "100%",
@@ -169,8 +173,8 @@ export default function IceApp() {
         </div>
       </div>
 
-      {/* Info text block, now full width of canvas */}
-      <div className="w-full text-[0.65rem] sm:text-xs text-gray-600 text-center space-y-1">
+      {/* Footer: semantic landmark for metadata and credits */}
+      <footer className="w-full text-[0.65rem] sm:text-xs text-gray-600 text-center space-y-1">
         <p>
           Historiska väderdata från Malmö (1917–2026) bearbetas i Express
           backend, beräknas mot fysiska formler, visualiseras i{" "}
@@ -188,7 +192,7 @@ export default function IceApp() {
             Github
           </a>
         </p>
-      </div>
+      </footer>
 
       {/* Screen reader result announcement */}
       <div aria-live="polite" aria-atomic="true" className="sr-only">
