@@ -121,11 +121,29 @@ Appen är WCAG 2.2 AA-kompatibel med fokus på fem lager:
 
 Frontend och backend kommunicerar via ett enkelt JSON API. Se [Detaljerad implementering](./docs/implementation.md) för hur varje lager fungerar.
 
+### ⚡ Prestanda optimering
+
+Jag mätte och optimerade latensen från användarens knappklick till animeringen startar. Använde denna metod: **Vercel preview deployments** (live Railway-backend) för en säker A/B-testning utan att påverka den nuvarande versionen.
+
+**Tre målriktade optimeringar:**
+
+1. **Response-komprimering (Gzip)** — Minskade svarsstorleken med ~60%
+2. **Browser-cache headers** — Webbläsaren cachar resultatet i 24h för samma år/månad (nya kombinationer beräknas alltid live)
+3. **Edge-cache headers (Vercel CDN)** — Global CDN höll kvar resultatet i cacheminnet
+
+**Resultat:**
+
+| Mätning | Innan      | Efter      | Förbättring                 |
+| ------- | ---------- | ---------- | --------------------------- |
+| Latens  | **459 ms** | **337 ms** | **122 ms snabbare (26.6%)** |
+
+_Uppmätt i DevTools Network tab, year=1942, month=2, via Vercel preview deployment_
+
 ### API
 
-- `GET /api/ice?year=:year&month=:month` — returnerar tjockaste isen för vald månad och om kon klarar sig
-- Visar även FDD-ackumulering, frys/töadagar för att användaren kan förstå beräkningen
-- **CalculationModal** förklarar exakt varför resultatet blev så
+- `GET /api/ice?year=:year&month=:month` — returnerar tjockaste isen för vald månad och boolean om en ko kan stå på isen.
+- Visar även FDD-ackumulering, frys/tödagar för att användaren kan ta del av beräkningen
+- **CalculationModal** förklarar exakt hur resultatet upnåddes, med formler och beräkningar.
 
 ---
 

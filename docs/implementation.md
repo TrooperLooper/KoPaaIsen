@@ -118,6 +118,42 @@ Användaren ser: En ko som antingen står på isen eller plumsar
 
 Beräkningarna körs on-demand per API-anrop snarare än att vara förberäknade. I ett produktionssystem hade man vänt på detta: förberäknat alla år/månads-kombinationer (1 387 st) och cachat dem i databasen eller som statisk JSON — ingen backend alls. Det on-demand alternativet som jag valde medvetet var för att bevisa en riktig backend-pipeline och hålla hela stacken synlig, på bekostnad av en liten fördröjning per anrop.
 
+## Prestandaoptimering
+
+Systemet är optimerat för att minimera latens från användarklick till animering startar.
+
+### Tre nivåer av caching:
+
+1. **Browser-cache**
+   - Webbläsaren sparar resultatet för samma år/månad
+   - Cache-Control header: `public, max-age=86400` (24h)
+   - ETag för cache-validering
+
+2. **Response-komprimering**
+   - Gzip-komprimering på alla API-svar via Express `compression()` middleware
+   - Svarsstorlek reduceras med ~60%
+   - Transparent för klienten (webbläsaren dekomprimerar automatiskt)
+
+3. **Edge-cache (Vercel CDN)**
+   - Cache-Control header: `s-maxage=86400` (24h på edge)
+   - Automatisk purge vid deployment
+   - Globalt CDN cachas resultatet för snabbare respons
+
+### Mätresultat
+
+Testade via Vercel preview deployment med live Railway-backend:
+
+```
+Produksjon (main):        459 ms
+Optimerad (perf/optimized): 337 ms
+────────────────────────
+Förbättring:              122 ms snabbare (26.6%)
+```
+
+Uppmätt i DevTools Network tab, year=1942, month=2.
+
+---
+
 ## Tech Stack
 
 - **Frontend:** React + TypeScript + Tailwind + Rive (animation) + Zod (runtime-validering)
