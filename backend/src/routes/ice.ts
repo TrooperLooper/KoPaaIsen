@@ -54,6 +54,8 @@ router.get("/", limiter, async (req: Request, res: Response) => {
     }
 
     const result = await calculateIceForMonth(year, month);
+    res.set("Cache-Control", "public, s-maxage=86400, max-age=86400, stale-while-revalidate=604800");
+    res.set("ETag", `"ice-${year}-${month}"`);
     return res.status(200).json(result);
   } catch (error) {
     logger.error("Error in GET /api/ice", { error, query: req.query });
