@@ -8,7 +8,12 @@ interface Props {
   year?: number;
 }
 
-export default function MonthDial({ value, onChange, disabled, year = 2000 }: Props) {
+export default function MonthDial({
+  value,
+  onChange,
+  disabled,
+  year = 2000,
+}: Props) {
   const getValidMonthRange = (selectedYear: number) => {
     if (selectedYear === 1917) {
       return { minIndex: 5, maxIndex: 7 }; // Mar, Apr, May (indices 5, 6, 7)
@@ -35,12 +40,15 @@ export default function MonthDial({ value, onChange, disabled, year = 2000 }: Pr
         onChange={(e) => onChange(MONTHS[Number(e.target.value)].value)}
         className="w-full accent-blue-400 cursor-pointer disabled:cursor-not-allowed"
         aria-label="Månad"
-        aria-valuetext={currentLabel}
+        aria-valuetext={`Månad ${currentLabel}`}
         aria-valuenow={validIndex}
         aria-valuemin={minIndex}
         aria-valuemax={maxIndex}
       />
-      <span className="w-full text-center text-3xl font-mono font-bold text-black">
+      <span
+        className="w-full text-center text-3xl font-mono font-bold text-black"
+        aria-hidden="true"
+      >
         {currentLabel}
       </span>
     </div>

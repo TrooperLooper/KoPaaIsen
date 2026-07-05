@@ -18,12 +18,15 @@ export default function YearDial({ value, onChange, disabled }: Props) {
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full accent-blue-400 cursor-pointer disabled:cursor-not-allowed"
         aria-label="År"
-        aria-valuetext={String(value)}
+        aria-valuetext={`År ${value}`}
         aria-valuenow={value}
         aria-valuemin={1917}
         aria-valuemax={2026}
       />
-      <span className="w-full text-center text-3xl font-mono font-bold text-black">
+      <span
+        className="w-full text-center text-3xl font-mono font-bold text-black"
+        aria-hidden="true"
+      >
         {value}
       </span>
     </div>

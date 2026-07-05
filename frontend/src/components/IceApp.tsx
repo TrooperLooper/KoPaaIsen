@@ -48,10 +48,11 @@ export default function IceApp() {
 
     const timer = setTimeout(() => {
       const humorous = holdsCow
-        ? "Hurra! Kon står säkert på isen."
-        : "Åh nej! Kon faller igenom isen.";
+        ? "Hurra! Kon står säkert på isen med nöjd min."
+        : "Åh nej! Kon plumsade rakt igenom isen, med överraskad min och fladdrande öron och svans.";
       const facts = `I ${monthName} ${year} var isen ${thickness} cm – ${holdsCow ? "tjock nog för en ko." : "för tunn för en ko."}`;
-      const nextSteps = "Om du vill veta hur detta beräknades, klicka på knappen \"Visa beräkning\". Eller tryck REWIND för att prova ett annat år.";
+      const nextSteps =
+        'Om du vill veta hur detta beräknades, klicka på knappen "Visa beräkning". Eller tryck REWIND för att prova ett annat år.';
       const announcement = `${humorous} ${facts} ${nextSteps}`;
       setLiveText(announcement);
     }, 2000);
@@ -80,7 +81,10 @@ export default function IceApp() {
     >
       {/* Screen reader only: semantic page title and subtitle */}
       <h1 className="sr-only">KO PÅ ISEN?</h1>
-      <p className="sr-only">Undersök hur stark isen va i Malmö genom åren. Ställ inn vilket år och månad du vill testa och tryck på knappen för att se resultatet.</p>
+      <p className="sr-only">
+        Undersök hur stark isen va i Malmö genom åren. Ställ inn vilket år och
+        månad du vill testa och tryck på knappen för att se resultatet.
+      </p>
 
       <div
         style={{
@@ -109,7 +113,10 @@ export default function IceApp() {
           />
           <Snowfall resetTrigger={animationKey} />
           {error && (
-            <div className="absolute inset-0 flex items-center justify-center" role="alert">
+            <div
+              className="absolute inset-0 flex items-center justify-center"
+              role="alert"
+            >
               <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg max-w-xs text-center">
                 <p className="font-semibold mb-2">Något gick fel</p>
                 <p className="text-sm">{error}</p>

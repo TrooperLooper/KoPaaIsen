@@ -11,15 +11,41 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const normalizeOrigin = (value: string): string => {
+  const trimmed = value.trim();
+  const withoutFragment = trimmed.split("#")[0];
+  return withoutFragment.replace(/\/+$/, "");
+};
+
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
+  ? process.env.ALLOWED_ORIGINS.split(",").map(normalizeOrigin)
   : ["http://localhost:5173"];
+
+const isOriginAllowed = (origin: string): boolean => {
+  const normalizedOrigin = normalizeOrigin(origin);
+
+  return allowedOrigins.some((allowed) => {
+    if (!allowed) return false;
+
+    // Support wildcard origins like https://*.vercel.app for preview deployments.
+    if (allowed.includes("*")) {
+      const pattern = new RegExp(
+        `^${allowed
+          .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
+          .replace(/\*/g, ".*")}$`,
+      );
+      return pattern.test(normalizedOrigin);
+    }
+
+    return allowed === normalizedOrigin;
+  });
+};
 
 app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (e.g. server-to-server, curl)
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || isOriginAllowed(origin)) {
         callback(null, true);
       } else {
         logger.warn(`CORS blocked origin: ${origin}`);
