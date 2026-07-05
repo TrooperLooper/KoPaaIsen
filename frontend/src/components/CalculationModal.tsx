@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { MONTH_NAMES } from "../constants/months";
 
 interface Props {
@@ -19,23 +19,14 @@ export default function CalculationModal({
   fdd = 0,
 }: Props) {
   const modalRef = useRef<HTMLDivElement>(null);
-  const [openAnnouncement, setOpenAnnouncement] = useState("");
 
   // Focus on modal open
   useEffect(() => {
-    if (!isOpen) {
-      setOpenAnnouncement("");
-      return;
-    }
+    if (!isOpen) return;
 
     if (modalRef.current) {
       modalRef.current.focus();
     }
-
-    // Explicit live announcement improves reliability across SR/browser combos.
-    setOpenAnnouncement(
-      "Du är i ett dialogfönster. Stäng med knappen Stäng, eller Escape på tangentbord. Hur vet vi om isen kunde bära? För att få svar på detta behöver vi veta två saker: ett, hur tjock is en ko krävde. Två, hur tjock isen faktiskt var det året.",
-    );
   }, [isOpen]);
 
   // Escape key to close
@@ -85,10 +76,6 @@ export default function CalculationModal({
   if (!isOpen) return null;
 
   const monthName = MONTH_NAMES[month] || "Februari";
-  const outcome =
-    thickness >= 11
-      ? "Isen höll - kon blev kvar på benen."
-      : "Isen höll inte - kon hade inte klarat sig på isen.";
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -97,30 +84,18 @@ export default function CalculationModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        aria-describedby="modal-summary"
+        aria-describedby="modal-instructions modal-intro"
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         className="bg-amber-50 rounded-lg max-w-2xl w-full p-4 sm:p-8 shadow-xl relative max-h-[90vh] overflow-y-auto"
       >
-        <div className="sr-only" aria-live="assertive" aria-atomic="true">
-          {openAnnouncement}
-        </div>
-
-        <p id="modal-summary" className="sr-only">
+        <p id="modal-instructions" className="sr-only">
           Du är i ett dialogfönster. Stäng med knappen Stäng, eller Escape på
           tangentbord. Hur vet vi om isen kunde bära? För att få svar på detta
           behöver vi veta två saker: ett, hur tjock is en ko krävde. Två, hur
-          tjock isen faktiskt var det året.
+          tjock isen faktiskt var det året. Navigera vidare för den detaljerade
+          förklaringen.
         </p>
-
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          aria-label="Stäng"
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 text-2xl"
-        >
-          ×
-        </button>
 
         <h2
           id="modal-title"
@@ -129,21 +104,34 @@ export default function CalculationModal({
           Hur vet vi om isen kunde bära?
         </h2>
 
-        <p className="inter-regular text-gray-700 mb-8 text-base text-center">
+        <p
+          id="modal-intro"
+          className="inter-regular text-gray-700 mb-8 text-base text-center"
+        >
           För att få svar på detta behöver vi veta två saker:
         </p>
 
         {/* Formula Sections Side by Side Mobile version */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 mb-6">
           {/* Gold's Formula Section */}
-          <div>
+          <div
+            role="group"
+            aria-labelledby="gold-heading"
+            aria-describedby="gold-summary"
+          >
             <div className="bg-[#CC7721] text-white p-3 text-center text-base font-bold tracking-wide mb-3">
               1. Hur tjock is en ko kräver
             </div>
             <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
-              <h3 className="inter-bold uppercase text-gray-900 mb-5 text-base">
+              <h3
+                id="gold-heading"
+                className="inter-bold uppercase text-gray-900 mb-5 text-base"
+              >
                 Golds formel
               </h3>
+              <p id="gold-summary" className="sr-only">
+                Här visas formeln för hur tjock is en ko kräver.
+              </p>
 
               <p className="inter-bold text-gray-900 mb-3 text-sm">
                 P = A × H²
@@ -178,14 +166,24 @@ export default function CalculationModal({
           </div>
 
           {/* Stefan's Formula Section */}
-          <div>
+          <div
+            role="group"
+            aria-labelledby="stefan-heading"
+            aria-describedby="stefan-summary"
+          >
             <div className="bg-[#CC7721] text-white p-3 text-center text-base font-bold tracking-wide mb-3">
               2. Hur tjock isen faktiskt var
             </div>
             <div className="p-6 bg-amber-100 rounded-lg text-center flex flex-col h-full">
-              <h3 className="inter-bold text-gray-900 mb-5 text-base uppercase">
+              <h3
+                id="stefan-heading"
+                className="inter-bold text-gray-900 mb-5 text-base uppercase"
+              >
                 Stefans formel
               </h3>
+              <p id="stefan-summary" className="sr-only">
+                Här visas beräkningen för hur tjock isen faktiskt var.
+              </p>
 
               <p className="inter-italic text-gray-700 mb-3 text-sm">
                 Bygger på netto frostgraddygn: varje grad under 0°C adderas per
@@ -228,10 +226,6 @@ export default function CalculationModal({
 
         {/* Result Section */}
         <div className="mt-20 mb-6 pb-6 text-center">
-          <p className="sr-only">
-            Så minst 11 cm is krävdes för en 400 kg ko, och den tjockaste isen i{" "}
-            {monthName} {year} var {thickness.toFixed(1)} cm. {outcome}
-          </p>
           <p className="inter-regular text-gray-700 mb-4 text-base">
             Så minst <span className="font-bold text-red-700">11</span> cm is
             krävdes för en <span className="text-green-700 font-bold">400</span>{" "}
@@ -253,6 +247,15 @@ export default function CalculationModal({
             </p>
           )}
         </div>
+
+        {/* Close button is placed last in DOM to become the final Tab stop */}
+        <button
+          onClick={onClose}
+          aria-label="Stäng"
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 text-2xl"
+        >
+          ×
+        </button>
       </div>
     </div>
   );
