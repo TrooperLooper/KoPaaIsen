@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { MONTH_NAMES } from "../constants/months";
 
 interface Props {
@@ -19,13 +19,23 @@ export default function CalculationModal({
   fdd = 0,
 }: Props) {
   const modalRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const [openAnnouncement, setOpenAnnouncement] = useState("");
 
   // Focus on modal open
   useEffect(() => {
-    if (isOpen && titleRef.current) {
-      titleRef.current.focus();
+    if (!isOpen) {
+      setOpenAnnouncement("");
+      return;
     }
+
+    if (modalRef.current) {
+      modalRef.current.focus();
+    }
+
+    // Explicit live announcement improves reliability across SR/browser combos.
+    setOpenAnnouncement(
+      "Du är i ett dialogfönster. Stäng med knappen Stäng, eller Escape på tangentbord. Hur vet vi om isen kunde bära? För att få svar på detta behöver vi veta två saker: ett, hur tjock is en ko krävde. Två, hur tjock isen faktiskt var det året.",
+    );
   }, [isOpen]);
 
   // Escape key to close
@@ -92,6 +102,10 @@ export default function CalculationModal({
         onKeyDown={handleKeyDown}
         className="bg-amber-50 rounded-lg max-w-2xl w-full p-4 sm:p-8 shadow-xl relative max-h-[90vh] overflow-y-auto"
       >
+        <div className="sr-only" aria-live="assertive" aria-atomic="true">
+          {openAnnouncement}
+        </div>
+
         <p id="modal-summary" className="sr-only">
           Du är i ett dialogfönster. Stäng med knappen Stäng, eller Escape på
           tangentbord. Hur vet vi om isen kunde bära? För att få svar på detta
@@ -110,8 +124,6 @@ export default function CalculationModal({
 
         <h2
           id="modal-title"
-          ref={titleRef}
-          tabIndex={-1}
           className="bevan-regular text-3xl text-gray-900 my-4 text-center tracking-tight w-full"
         >
           Hur vet vi om isen kunde bära?
