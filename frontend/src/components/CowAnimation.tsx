@@ -48,11 +48,13 @@ export default function CowAnimation({ holdsCow, isLoading }: Props) {
         <RiveComponent />
       </div>
       <span className="sr-only">
-        {holdsCow === null
+        {isLoading
           ? "Animationen laddas..."
           : holdsCow
             ? "Hurra! Kon står stadigt på isen med viftande öron och nöjd min."
-            : "Åh nej! Kon sjunker genom isen med överraskad min, fladdrande öron och svans."}
+            : holdsCow === false
+              ? "Åh nej! Kon sjunker genom isen med överraskad min, fladdrande öron och svans."
+              : ""}
       </span>
     </>
   );

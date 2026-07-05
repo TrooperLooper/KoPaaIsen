@@ -47,12 +47,12 @@ export default function IceApp() {
     const holdsCow = result.holdsCow;
 
     const timer = setTimeout(() => {
-      let announcement: string;
-      if (holdsCow) {
-        announcement = `Isen håller! I ${monthName} ${year} var isen ${thickness} cm – tjock nog för en ko. Kon står säkert på isen. Tryck REWIND för att prova ett annat år.`;
-      } else {
-        announcement = `Isen håller inte. I ${monthName} ${year} var isen ${thickness} cm – för tunn för en ko. Kon faller igenom isen. Tryck REWIND för att prova ett annat år.`;
-      }
+      const humorous = holdsCow
+        ? "Hurra! Kon står säkert på isen."
+        : "Åh nej! Kon faller igenom isen.";
+      const facts = `I ${monthName} ${year} var isen ${thickness} cm – ${holdsCow ? "tjock nog för en ko." : "för tunn för en ko."}`;
+      const nextSteps = "Om du vill veta hur detta beräknades, klicka på knappen \"Visa beräkning\". Eller tryck REWIND för att prova ett annat år.";
+      const announcement = `${humorous} ${facts} ${nextSteps}`;
       setLiveText(announcement);
     }, 2000);
 

@@ -36,6 +36,9 @@ export default function MonthDial({ value, onChange, disabled, year = 2000 }: Pr
         className="w-full accent-blue-400 cursor-pointer disabled:cursor-not-allowed"
         aria-label="Månad"
         aria-valuetext={currentLabel}
+        aria-valuenow={validIndex}
+        aria-valuemin={minIndex}
+        aria-valuemax={maxIndex}
       />
       <span className="w-full text-center text-3xl font-mono font-bold text-black">
         {currentLabel}
