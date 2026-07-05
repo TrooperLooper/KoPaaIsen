@@ -19,11 +19,12 @@ export default function CalculationModal({
   fdd = 0,
 }: Props) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   // Focus on modal open
   useEffect(() => {
-    if (isOpen && modalRef.current) {
-      modalRef.current.focus();
+    if (isOpen && titleRef.current) {
+      titleRef.current.focus();
     }
   }, [isOpen]);
 
@@ -47,7 +48,8 @@ export default function CalculationModal({
 
     const focusableSelector =
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const focusableElements = modalRef.current?.querySelectorAll(focusableSelector) || [];
+    const focusableElements =
+      modalRef.current?.querySelectorAll(focusableSelector) || [];
     const focusableArray = Array.from(focusableElements) as HTMLElement[];
 
     if (focusableArray.length === 0) return;
@@ -73,6 +75,10 @@ export default function CalculationModal({
   if (!isOpen) return null;
 
   const monthName = MONTH_NAMES[month] || "Februari";
+  const outcome =
+    thickness >= 11
+      ? "Isen höll - kon blev kvar på benen."
+      : "Isen höll inte - kon hade inte klarat sig på isen.";
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -81,10 +87,18 @@ export default function CalculationModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
+        aria-describedby="modal-summary"
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         className="bg-amber-50 rounded-lg max-w-2xl w-full p-4 sm:p-8 shadow-xl relative max-h-[90vh] overflow-y-auto"
       >
+        <p id="modal-summary" className="sr-only">
+          Du är i ett dialogfönster. Stäng med knappen Stäng, eller Escape på
+          tangentbord. Hur vet vi om isen kunde bära? För att få svar på detta
+          behöver vi veta två saker: ett, hur tjock is en ko krävde. Två, hur
+          tjock isen faktiskt var det året.
+        </p>
+
         {/* Close button */}
         <button
           onClick={onClose}
@@ -94,7 +108,12 @@ export default function CalculationModal({
           ×
         </button>
 
-        <h2 id="modal-title" className="bevan-regular text-3xl text-gray-900 my-4 text-center tracking-tight w-full">
+        <h2
+          id="modal-title"
+          ref={titleRef}
+          tabIndex={-1}
+          className="bevan-regular text-3xl text-gray-900 my-4 text-center tracking-tight w-full"
+        >
           Hur vet vi om isen kunde bära?
         </h2>
 
@@ -162,8 +181,7 @@ export default function CalculationModal({
                 frostgraddygn, men töväder äter upp dem igen.
               </p>
               <p className="inter-regular text-gray-700 mb-3 text-sm">
-                Vintern fram till {monthName} {year} hade:{" "}
-                <br />
+                Vintern fram till {monthName} {year} hade: <br />
                 <span>
                   {" "}
                   <span className="text-red-700 font-bold">
@@ -198,6 +216,10 @@ export default function CalculationModal({
 
         {/* Result Section */}
         <div className="mt-20 mb-6 pb-6 text-center">
+          <p className="sr-only">
+            Så minst 11 cm is krävdes för en 400 kg ko, och den tjockaste isen i{" "}
+            {monthName} {year} var {thickness.toFixed(1)} cm. {outcome}
+          </p>
           <p className="inter-regular text-gray-700 mb-4 text-base">
             Så minst <span className="font-bold text-red-700">11</span> cm is
             krävdes för en <span className="text-green-700 font-bold">400</span>{" "}

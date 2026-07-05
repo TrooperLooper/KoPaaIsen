@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import type { RefObject } from "react";
 import { MONTH_NAMES } from "../constants/months";
 
 interface Props {
@@ -6,6 +7,8 @@ interface Props {
   month: number;
   thickness?: number;
   onInfoClick?: () => void;
+  infoButtonRef?: RefObject<HTMLButtonElement | null>;
+  isTabbable?: boolean;
 }
 
 export default function IceInfo({
@@ -13,6 +16,8 @@ export default function IceInfo({
   month,
   thickness,
   onInfoClick,
+  infoButtonRef,
+  isTabbable = true,
 }: Props) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -38,9 +43,10 @@ export default function IceInfo({
           Klicka för att se hur det beräknades
         </p>
         <button
+          ref={infoButtonRef}
           onClick={onInfoClick}
           aria-label="Visa beräkning"
-          tabIndex={isVisible ? 0 : -1}
+          tabIndex={isVisible && isTabbable ? 0 : -1}
           className="info-button shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-colors cursor-pointer text-sm sm:text-base"
         >
           i

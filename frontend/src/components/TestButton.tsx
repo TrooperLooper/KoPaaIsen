@@ -5,6 +5,8 @@ interface Props {
   onReset: () => void;
   isLoading: boolean;
   hasResult: boolean;
+  onRewindReadyChange?: (isReady: boolean) => void;
+  onTabForwardFromRewind?: () => void;
 }
 
 const ANIMATION_DURATION = 2000; // 2 seconds
@@ -14,18 +16,26 @@ export default function TestButton({
   onReset,
   isLoading,
   hasResult,
+  onRewindReadyChange,
+  onTabForwardFromRewind,
 }: Props) {
   const [animationComplete, setAnimationComplete] = useState(false);
 
   useEffect(() => {
     if (hasResult && !isLoading) {
       setAnimationComplete(false);
+      onRewindReadyChange?.(false);
       const timer = setTimeout(() => {
         setAnimationComplete(true);
+        onRewindReadyChange?.(true);
       }, ANIMATION_DURATION);
       return () => clearTimeout(timer);
     }
-  }, [hasResult, isLoading]);
+
+    if (!hasResult || isLoading) {
+      onRewindReadyChange?.(false);
+    }
+  }, [hasResult, isLoading, onRewindReadyChange]);
 
   let bgColor = "#10652F"; // green - initial
   let textColor = "white";
@@ -114,6 +124,18 @@ export default function TestButton({
       `}</style>
       <button
         onClick={handleClick}
+        onKeyDown={(e) => {
+          if (
+            e.key === "Tab" &&
+            !e.shiftKey &&
+            hasResult &&
+            animationComplete &&
+            onTabForwardFromRewind
+          ) {
+            e.preventDefault();
+            onTabForwardFromRewind();
+          }
+        }}
         aria-disabled={isDisabled}
         tabIndex={0}
         aria-label={ariaLabel}

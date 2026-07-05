@@ -15,8 +15,10 @@ export default function IceApp() {
   const [month, setMonth] = useState(2);
   const [animationKey, setAnimationKey] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInfoTabbable, setIsInfoTabbable] = useState(false);
   const [liveText, setLiveText] = useState<string | null>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
+  const infoButtonRef = useRef<HTMLButtonElement | null>(null);
   const { result, isLoading, error, fetchData, clearResult } = useIceData();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -65,6 +67,7 @@ export default function IceApp() {
   const handleReset = () => {
     clearResult();
     setLiveText(null);
+    setIsInfoTabbable(false);
     setAnimationKey((prev) => prev + 1);
   };
 
@@ -129,6 +132,8 @@ export default function IceApp() {
               month={month}
               thickness={result.maxIceCm}
               onInfoClick={openModal}
+              infoButtonRef={infoButtonRef}
+              isTabbable={isInfoTabbable}
             />
           )}
         </div>
@@ -175,6 +180,8 @@ export default function IceApp() {
               onReset={handleReset}
               isLoading={isLoading}
               hasResult={!!result}
+              onRewindReadyChange={setIsInfoTabbable}
+              onTabForwardFromRewind={() => infoButtonRef.current?.focus()}
             />
           </div>
         </div>
